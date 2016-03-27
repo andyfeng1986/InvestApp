@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/store_record_left_margin"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:text="省" />
+        <Spinner
+            android:id="@+id/province_spinner"
+            android:layout_width="@dimen/store_record_right_item_width"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/store_record_right_margin"
+            android:layout_alignParentRight="true">
+        </Spinner>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/y10">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/store_record_left_margin"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="市" />
+        <Spinner
+            android:id="@+id/city_spinner"
+            android:layout_width="@dimen/store_record_right_item_width"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/store_record_right_margin"
+            android:layout_alignParentRight="true">
+        </Spinner>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/y10">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/store_record_left_margin"
+            android:gravity="center"
+            android:text="区" />
+        <Spinner
+            android:id="@+id/area_spinner"
+            android:layout_width="@dimen/store_record_right_item_width"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/store_record_right_margin"
+            android:layout_alignParentRight="true">
+        </Spinner>
+    </RelativeLayout>
+
+</LinearLayout>

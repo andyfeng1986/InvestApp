@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="access_info">
+        <item>正常访问</item>
+        <item>未营业</item>
+        <item>拒访</item>
+    </string-array>
+
+    <string-array name="custom_info">
+        <item>汽机油</item>
+        <item>柴机油</item>
+    </string-array>
+
+    <string-array name="gas">
+        <item>请选择</item>
+        <item>4s店</item>
+        <item>品牌专修店</item>
+        <item>独立修理厂</item>
+        <item>综合保养店</item>
+        <item>快修店</item>
+        <item>车队</item>
+        <item>其他</item>
+    </string-array>
+
+    <string-array name="diesel">
+        <item>请选择</item>
+        <item>综合保养店</item>
+        <item>换油中心</item>
+        <item>特约维修站</item>
+        <item>快修店</item>
+        <item>车队</item>
+        <item>其他</item>
+    </string-array>
+
+    <string-array name="avg_oil">
+        <item>无</item>
+        <item>10桶以内</item>
+        <item>10-20桶/月</item>
+        <item>20-50桶/月</item>
+        <item>50-100桶/月</item>
+        <item>100桶/月</item>
+    </string-array>
+
+    <string-array name="distribution">
+        <item>壳牌</item>
+        <item>嘉实多</item>
+        <item>美孚</item>
+    </string-array>
+
+</resources>
+
+

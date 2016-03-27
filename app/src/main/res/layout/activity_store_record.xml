@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:text="正在加载数据，请稍后"
+        android:textSize="20sp"
+        android:id="@+id/hint_tv" />
+
+    <LinearLayout
+        android:id="@+id/contentLL"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/photoBtn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="拍照" />
+
+            <Button
+                android:id="@+id/audioBtn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="开始录音" />
+
+            <Button
+                android:id="@+id/saveBtn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="保存" />
+
+            <Button
+                android:id="@+id/commitBtn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="提交" />
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/polyname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/store_record_left_margin"
+                    android:layout_marginTop="@dimen/y10"/>
+
+                <TextView
+                    android:id="@+id/lat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/store_record_left_margin"
+                    android:layout_marginTop="@dimen/y10"/>
+
+                <TextView
+                    android:id="@+id/lng"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/store_record_left_margin"
+                    android:layout_marginTop="@dimen/y10"/>
+
+                <RelativeLayout
+                    android:id="@+id/access_info_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y100"
+                    android:layout_marginTop="@dimen/y10"
+                    android:layout_marginLeft="@dimen/store_record_left_margin"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="访问情况*" />
+                    <Spinner
+                        android:id="@+id/access_info_spinner"
+                        android:layout_width="@dimen/store_record_right_item_width"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/store_record_right_margin"
+                        android:layout_alignParentRight="true"
+                        android:entries="@array/access_info">
+                    </Spinner>
+                </RelativeLayout>
+
+                <include
+                    android:id="@+id/include_customname"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y100"
+                    android:layout_marginTop="@dimen/y10"
+                    layout="@layout/store_record_item" />
+
+                <include
+                    android:id="@+id/include_contact"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y100"
+                    android:layout_marginTop="@dimen/y10"
+                    layout="@layout/store_record_item" />
+
+                <include
+                    android:id="@+id/include_telphone"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y100"
+                    android:layout_marginTop="@dimen/y10"
+                    layout="@layout/store_record_item" />
+
+                <include
+                    android:id="@+id/include_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y100"
+                    android:layout_marginTop="@dimen/y10"
+                    layout="@layout/store_record_item" />
+
+                <include
+                    android:id="@+id/include_faxnum"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y100"
+                    android:layout_marginTop="@dimen/y10"
+                    layout="@layout/store_record_item" />
+
+                <include
+                    android:id="@+id/fixphone"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y100"
+                    android:layout_marginTop="@dimen/y10"
+                    layout="@layout/store_record_item" />
+
+                <include
+                    android:id="@+id/include_youbian"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y100"
+                    android:layout_marginTop="@dimen/y10"
+                    layout="@layout/store_record_item" />
+
+                <include
+                    android:id="@+id/include_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y100"
+                    android:layout_marginTop="@dimen/y10"
+                    layout="@layout/store_record_item" />
+
+                <com.investigatorsapp.widget.AddressLayout
+                    android:id="@+id/address_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/y10">
+                </com.investigatorsapp.widget.AddressLayout>
+
+                <include
+                    android:id="@+id/include_station_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y100"
+                    android:layout_marginTop="@dimen/y10"
+                    layout="@layout/store_record_item" />
+
+                <include
+                    android:id="@+id/include_repair_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y100"
+                    android:layout_marginTop="@dimen/y10"
+                    layout="@layout/store_record_item" />
+
+                <RelativeLayout
+                    android:id="@+id/custom_type_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/y100"
+                    android:layout_marginTop="@dimen/y10"
+                    android:layout_marginLeft="@dimen/store_record_left_margin"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="客户类型*" />
+                    <Spinner
+                        android:id="@+id/custom_type_spinner"
+                        android:layout_width="@dimen/store_record_right_item_width"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/store_record_right_margin"
+                        android:layout_alignParentRight="true"
+                        android:entries="@array/custom_info">
+                    </Spinner>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/channel_type_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/y100"
+                    android:layout_marginTop="@dimen/y10"
+                    android:layout_marginLeft="@dimen/store_record_left_margin"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="渠道类型*" />
+                    <Spinner
+                        android:id="@+id/channel_type_spinner"
+                        android:layout_width="@dimen/store_record_right_item_width"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/store_record_right_margin"
+                        android:layout_alignParentRight="true">
+                    </Spinner>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/distribution_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/y100"
+                    android:layout_marginTop="@dimen/y10"
+                    android:layout_marginLeft="@dimen/store_record_left_margin"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="产品分销" />
+                    <Button
+                        android:id="@+id/distribution_btn"
+                        android:layout_width="@dimen/store_record_right_item_width"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/store_record_right_margin"
+                        android:layout_alignParentRight="true"
+                        android:text="请选择" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/avgoil_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/y100"
+                    android:layout_marginTop="@dimen/y10"
+                    android:layout_marginLeft="@dimen/store_record_left_margin"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="月均用油量" />
+                    <Spinner
+                        android:id="@+id/avg_oil_spinner"
+                        android:layout_width="@dimen/store_record_right_item_width"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="@dimen/store_record_right_margin"
+                        android:layout_alignParentRight="true"
+                        android:entries="@array/avg_oil">
+                    </Spinner>
+                </RelativeLayout>
+
+
+
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/address_choice_ll"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="@dimen/y100"-->
+                    <!--android:layout_marginTop="@dimen/y10"-->
+                    <!--android:orientation="horizontal">-->
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="省市区" />-->
+                    <!--<com.investigatorsapp.widget.AddressLayout-->
+                        <!--android:id="@+id/address_layout"-->
+                        <!--android:layout_marginLeft="@dimen/x60"-->
+                        <!--android:layout_marginRight="@dimen/x60"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content">-->
+                    <!--</com.investigatorsapp.widget.AddressLayout>-->
+                <!--</LinearLayout>-->
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</RelativeLayout>
+
