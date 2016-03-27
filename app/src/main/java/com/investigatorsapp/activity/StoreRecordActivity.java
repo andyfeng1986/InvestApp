@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -489,6 +490,11 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
     }
 
     private boolean checkInput() {
+        File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
+        if(!file.exists()) {
+            Toast.makeText(this, "未拍照，请拍照后再保存或提交", Toast.LENGTH_SHORT).show();
+            return false;
+        }
         if(TextUtils.isEmpty(customNameET.getText().toString())) {
             Toast.makeText(this, "客户名称不能为空", Toast.LENGTH_SHORT).show();
             return false;
@@ -507,11 +513,6 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
         }
         if(channelTypeSpinner.getSelectedItemPosition() == 0) {
             Toast.makeText(this, "渠道类型不能为空", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
-        if(!file.exists()) {
-            Toast.makeText(this, "未拍照，请拍照后再保存或提交", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -661,14 +662,14 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
 
     private void clickPhotoBtn() {
 //my photo
-//        File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
-//        Logger.d(TAG, "file path = " + file.getAbsolutePath());
-//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-//        startActivityForResult(intent, 1);
-
+        File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
+        Logger.d(TAG, "file path = " + file.getAbsolutePath());
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
         startActivityForResult(intent, 1);
+
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        startActivityForResult(intent, 1);
 
 //        Intent intent = new Intent(this, TakePhotoActivity.class);
 //        intent.putExtra("saler_no", mSalerNo);
@@ -681,9 +682,9 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
 //my photo
-//                File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
-//                Bitmap bitmap = getSmallBitmap(file.getAbsolutePath());
-//                saveImage(bitmap, file.getAbsolutePath());
+                File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
+                Bitmap bitmap = getSmallBitmap(file.getAbsolutePath());
+                saveImage(bitmap, file.getAbsolutePath());
 
 //                Bitmap markPre = BitmapFactory.decodeResource(this.getResources(), R.drawable.logo);
 //                int distWidth = bm.getWidth() / 5;
@@ -704,16 +705,16 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
 //                canvas.save(Canvas.ALL_SAVE_FLAG);
 //                canvas.restore();
 
-                try {
-                    File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
-                    Bitmap bm = (Bitmap) data.getExtras().get("data");
-                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
-                    bm.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-                    bos.flush();
-                    bos.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
+//                    Bitmap bm = (Bitmap) data.getExtras().get("data");
+//                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+//                    bm.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+//                    bos.flush();
+//                    bos.close();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
             }
         }
     }
@@ -737,7 +738,7 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
         BitmapFactory.decodeFile(filePath, options);
 
         // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, 320, 480);
+        options.inSampleSize = calculateInSampleSize(options, 240, 320);
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
