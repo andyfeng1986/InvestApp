@@ -5,19 +5,16 @@
 
     <TextView
         android:id="@+id/tv"
-        android:layout_marginLeft="@dimen/store_record_left_margin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:text="test" />
+        android:text="产品分销" />
 
-    <EditText
-        android:id="@+id/et"
-        android:layout_marginRight="@dimen/store_record_right_margin"
+    <Button
+        android:id="@+id/btn"
         android:layout_width="@dimen/store_record_right_item_width"
-        android:maxLength="128"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:singleLine="true"
-        android:layout_height="wrap_content" />
-
+        android:layout_marginRight="@dimen/store_record_right_margin"
+        android:text="请选择" />
 </RelativeLayout>
