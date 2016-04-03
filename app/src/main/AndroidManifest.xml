@@ -84,6 +84,10 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar">
         </activity>
+        <activity android:name=".activity.DynamicStoreActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"

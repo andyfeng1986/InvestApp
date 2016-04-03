@@ -155,6 +155,39 @@ public class UrlWrapper {
         return BASE_URL + "/postTrace";
     }
 
+    public static String getQstUrl() {
+        return BASE_URL + "/getQst";
+    }
+
+    static class SurveyJson {
+        public String type;
+        public String userid;
+        public String jobid;
+        public String token;
+    }
+
+    public static String getQstParam() {
+        User user = UserSingleton.getInstance().getUser();
+        try {
+            SurveyJson json = new SurveyJson();
+            json.type = "getQst";
+            json.userid = user.userid;
+            json.jobid = user.jobid;
+            json.token = user.token;
+            Gson gson = new Gson();
+            return gson.toJson(json);
+//            StringBuilder stringBuilder = new StringBuilder();
+//            stringBuilder.append("type=getPol&")
+//                    .append("userid=").append(URLEncoder.encode(user.userid, ENCODE))
+//                    .append("&jobid=").append(URLEncoder.encode(user.jobid, ENCODE))
+//                    .append("&token=").append(URLEncoder.encode(user.token, ENCODE));
+//            return stringBuilder.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
 //    public static String getLocReportParams(Context context) {
 //        LocReport locReport = new LocReport();
 //        locReport.type = "postTrace";
