@@ -26,6 +26,7 @@ import com.android.volley.toolbox.GsonRequest;
 import com.investigatorsapp.R;
 import com.investigatorsapp.adapter.ChoiceAdapter;
 import com.investigatorsapp.adapter.DistributionAdapter;
+import com.investigatorsapp.common.LocationReport;
 import com.investigatorsapp.common.SalernoManager;
 import com.investigatorsapp.common.UserSingleton;
 import com.investigatorsapp.common.VolleySingleton;
@@ -365,26 +366,33 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
             save();
         } else if(v.equals(commitBtn)) {
             commit();
+            LocationReport.reportLocation(this);
         }
     }
 
     private void save() {
-        File destDir = new File(getFilesDir(), UserSingleton.getInstance().getUser().userid);
-        if (!destDir.exists()) {
-            destDir.mkdirs();
-        }
-        File file = new File(destDir, mSalerNo);
-        try {
-            FileOutputStream outputStream = new FileOutputStream(file);
-            outputStream.write(genCommitString().getBytes());
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(checkInput()) {
+            stopAudio();
+            File destDir = new File(getFilesDir(), UserSingleton.getInstance().getUser().userid);
+            if (!destDir.exists()) {
+                destDir.mkdirs();
+            }
+            File file = new File(destDir, mSalerNo);
+            try {
+                FileOutputStream outputStream = new FileOutputStream(file);
+                outputStream.write(genCommitString().getBytes());
+                outputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            SalernoManager.getInstance().updatePolycountHashMap(mPolygonid);
+            Toast.makeText(this, "问卷已保存, 请后续在店面页面提交", Toast.LENGTH_LONG).show();
         }
     }
 
     private void commit() {
         if(checkInput()) {
+            stopAudio();
             String string = genCommitString();
             String resultGsonString = new StringBuilder().append("{\"type\":\"postQst2\",")
                     .append(string).append("}").toString();
