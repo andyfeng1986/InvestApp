@@ -40,6 +40,7 @@ import com.investigatorsapp.utils.Util;
 import com.investigatorsapp.widget.AddressLayout;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -361,9 +362,24 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if(v.equals(saveBtn)) {
-
+            save();
         } else if(v.equals(commitBtn)) {
+            commit();
+        }
+    }
 
+    private void save() {
+        File destDir = new File(getFilesDir(), UserSingleton.getInstance().getUser().userid);
+        if (!destDir.exists()) {
+            destDir.mkdirs();
+        }
+        File file = new File(destDir, mSalerNo);
+        try {
+            FileOutputStream outputStream = new FileOutputStream(file);
+            outputStream.write(genCommitString().getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
