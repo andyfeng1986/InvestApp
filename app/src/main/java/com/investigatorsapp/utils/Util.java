@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.investigatorsapp.app.MyApp;
@@ -22,6 +23,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by fenglei on 15/12/21.
@@ -348,6 +351,22 @@ public class Util {
             }
         }
         return "";
+    }
+
+    public static Map<String, String> stringToMap(String content) {
+        Map<String, String> map = new HashMap<>();
+        if(!TextUtils.isEmpty(content)) {
+            String[] strings = content.split(",");
+            for(int i = 0; i < strings.length; i++) {
+                String[] inStrings = strings[i].split(":");
+                if(inStrings.length == 2) {
+                    String key = inStrings[0].substring(1, inStrings[0].length() - 1);
+                    String value = inStrings[1].substring(1, inStrings[1].length() - 1);
+                    map.put(key, value);
+                }
+            }
+        }
+        return map;
     }
 
 

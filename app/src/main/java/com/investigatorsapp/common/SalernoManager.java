@@ -3,6 +3,7 @@ package com.investigatorsapp.common;
 import android.content.Context;
 
 import com.investigatorsapp.model.BlocksResult;
+import com.investigatorsapp.utils.Util;
 
 import java.io.File;
 import java.util.Map;
@@ -54,8 +55,8 @@ public class SalernoManager {
                         String salerno = file.getName();
                         int salernum = Integer.parseInt(salerno.substring(salerno.length() - 5));
                         //readContent
-                        String content = "";
-                        int start = content.indexOf("polygonid") + 8 + 3;
+                        String content = Util.readFileToString(file);
+                        int start = content.indexOf("polygonid") + 9 + 3;
                         int end = content.indexOf("\"", start);
                         String polygonid = content.substring(start, end);
                         Integer count = salernoHashMap.get(polygonid);

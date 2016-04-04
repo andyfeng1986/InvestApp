@@ -4,7 +4,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaRecorder;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -41,6 +44,7 @@ import com.investigatorsapp.widget.AddressLayout;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,60 +60,66 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
 
     private static final String TAG = DynamicStoreActivity.class.getSimpleName();
 
-//    private static class MediaRecorderHandler extends Handler {
-//
-//        private WeakReference<StoreRecordActivity> weakReference;
-//
-//        public MediaRecorderHandler(StoreRecordActivity activity) {
-//            weakReference = new WeakReference<StoreRecordActivity>(activity);
-//        }
-//
-//        @Override
-//        public void handleMessage(Message msg) {
-//            StoreRecordActivity activity = weakReference.get();
-//            if(activity != null) {
-//                activity.stopMediaRecorder();
-//            }
-//        }
-//    }
-//
-//    private class GetDataAsyncTask extends AsyncTask<String, Void, Store> {
-//
-//        @Override
-//        protected Store doInBackground(String... params) {
-//            String salerno = params[0];
-//            StoreDao dao = DaoSessionInstance.getDaoSession(StoreRecordActivity.this).getStoreDao();
-//            QueryBuilder<Store> queryBuilder = dao.queryBuilder();
-//            Store store = queryBuilder.where(StoreDao.Properties.Salerno.eq(salerno)).build().unique();
-//            return store;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Store store) {
-//            hintTV.setVisibility(View.GONE);
-//            contentVG.setVisibility(View.VISIBLE);
-//            if(store != null) {
-//                mStore = store;
-//                mPolygonid = mStore.getPolygonid();
-//                mLat1 = mStore.getLat1();
-//                mLng1 = mStore.getLng1();
-//                mPolyname = mStore.getPolygonname();
-//                mEnterTime = mStore.getTime();
-//                setUI(store);
-//            }else {
-//                mEnterTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-//                polynameTV.setText("区块: " + mPolyname);
-//                latTV.setText("纬度: " + mLat1);
-//                lngTV.setText("经度: " + mLng1);
-//                startMediaRecorder();
-//                mediaRecorderHandler = new MediaRecorderHandler(StoreRecordActivity.this);
-//                mediaRecorderHandler.sendEmptyMessageDelayed(0, 20 * 60 * 1000);
-//            }
-//            initAddressLayout(store);
-//        }
-//    }
-//
-//    private MediaRecorderHandler mediaRecorderHandler;
+    private static class MediaRecorderHandler extends Handler {
+
+        private WeakReference<DynamicStoreActivity> weakReference;
+
+        public MediaRecorderHandler(DynamicStoreActivity activity) {
+            weakReference = new WeakReference<DynamicStoreActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            DynamicStoreActivity activity = weakReference.get();
+            if(activity != null) {
+                activity.stopAudio();
+            }
+        }
+    }
+
+    private class GetDataAsyncTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            File destDir = new File(getFilesDir(), UserSingleton.getInstance().getUser().userid);
+            if(destDir.exists()) {
+                File[] fileList = destDir.listFiles();
+                if(fileList != null && fileList.length > 0) {
+                    for(File file : fileList) {
+                        if(file.getName().equals(mSalerNo)) {
+                            return Util.readFileToString(file);
+                        }
+                    }
+                }
+            }
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String content) {
+            if(!TextUtils.isEmpty(content)) {
+                contentMap = Util.stringToMap(content);
+                mPolygonid = contentMap.get("polygonid");
+                mLatb = contentMap.get("lat_b");
+                mLngb = contentMap.get("lng_b");
+                mPolyname = contentMap.get("polyname");
+                mEnterTime = contentMap.get("create_time");
+                setUIFormSaveData();
+            }else {
+                mEnterTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+                startAudio(mSurvey);
+                mediaRecorderHandler = new MediaRecorderHandler(DynamicStoreActivity.this);
+                mediaRecorderHandler.sendEmptyMessageDelayed(0, 20 * 60 * 1000);
+            }
+            polynameTV.setText("区块: " + mPolyname);
+            latTV.setText("纬度: " + mLatb);
+            lngTV.setText("经度: " + mLngb);
+            hintTV.setVisibility(View.GONE);
+            allVG.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private MediaRecorderHandler mediaRecorderHandler;
 
     private String mSalerNo;
     private String mPolygonid;
@@ -128,6 +138,9 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
 
     private LinearLayout mContentLL;
 
+    private TextView polynameTV;
+    private TextView latTV;
+    private TextView lngTV;
     private ViewGroup customNameLL;
     private ViewGroup telphoneLL;
     private ViewGroup addressLL;
@@ -137,6 +150,8 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
     private AddressLayout addressLayout;
 
     private Map<Survey.Question, View> viewMap = new HashMap<>();
+
+    private Map<String, String> contentMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,16 +167,6 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         mPolyname = intent.getStringExtra("polyname");
         Logger.d(TAG, "mSalerNo = " + mSalerNo + ", polygonid = " + mPolygonid
                 + ", mPolyname = " + mPolyname);
-
-        mEnterTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-
-        hintTV = (TextView) findViewById(R.id.hint_tv);
-        allVG = (ViewGroup) findViewById(R.id.allLL);
-        hintTV.setVisibility(View.VISIBLE);
-        allVG.setVisibility(View.GONE);
-
-        mContentLL = (LinearLayout)findViewById(R.id.content_ll);
-
         initFixUI();
         getData();
     }
@@ -177,10 +182,9 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
             Toast.makeText(this, "无法获取店面编号", Toast.LENGTH_LONG).show();
             finish();
         } else {
-//            GetDataAsyncTask asyncTask = new GetDataAsyncTask();
-//            asyncTask.execute(mSalerNo);
+            getSurvey();
+
         }
-        getSurvey();
     }
 
     private void getSurvey() {
@@ -190,9 +194,9 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
             @Override
             public void onResponse(Survey response) {
                 mSurvey = response;
-                initDynamicUI(response);
-                hintTV.setVisibility(View.GONE);
-                allVG.setVisibility(View.VISIBLE);
+                initDynamicUI(mSurvey);
+                GetDataAsyncTask asyncTask = new GetDataAsyncTask();
+                asyncTask.execute(mSalerNo);
             }
         }, new Response.ErrorListener() {
                 @Override
@@ -205,10 +209,19 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initFixUI() {
+        hintTV = (TextView) findViewById(R.id.hint_tv);
+        allVG = (ViewGroup) findViewById(R.id.allLL);
+        hintTV.setVisibility(View.VISIBLE);
+        allVG.setVisibility(View.GONE);
+        mContentLL = (LinearLayout)findViewById(R.id.content_ll);
+
         commitBtn = (Button) findViewById(R.id.commitBtn);
         saveBtn = (Button) findViewById(R.id.saveBtn);
         commitBtn.setOnClickListener(this);
         saveBtn.setOnClickListener(this);
+        polynameTV = (TextView) findViewById(R.id.polyname);
+        latTV = (TextView) findViewById(R.id.lat);
+        lngTV = (TextView) findViewById(R.id.lng);
         customNameLL = (ViewGroup)findViewById(R.id.include_customname);
         customNameET = (EditText) customNameLL.findViewById(R.id.et);
         customNameET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(128)});
@@ -679,6 +692,68 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         return true;
     }
 
+    private void setUIFormSaveData() {
+        setFixedUI();
+        setDynamicUI();
+    }
+
+    private void setDynamicUI() {
+        for(Map.Entry<Survey.Question, View> entry : viewMap.entrySet()) {
+            if (entry != null) {
+                Survey.Question question = entry.getKey();
+                View view = entry.getValue();
+                if("text".equals(question.type) || "number".equals(question.type)) {
+                    EditText et = (EditText) view.findViewById(R.id.et);
+                    et.setText(contentMap.get(question.name));
+                } else if("single".equals(question.type)) {
+                    Button btn = (Button) view.findViewById(R.id.btn);
+                    btn.setText(contentMap.get(question.name));
+                } else if("multi".equals(question.type)) {
+                    Button btn = (Button) view.findViewById(R.id.btn);
+                    StringBuilder sb = new StringBuilder();
+                    if(question.option != null) {
+                        for(int i = 0; i < question.option.size(); i++) {
+                            Survey.Option option = question.option.get(i);
+                            if(option != null) {
+                                if("1".equals(contentMap.get(option.name))) {
+                                    if(i != 0) {
+                                        sb.append(",");
+                                    }
+                                    sb.append(option.text);
+                                }
+                            }
+                        }
+                    }
+                    btn.setText(sb.toString());
+                }
+            }
+        }
+    }
+
+    private void setFixedUI() {
+        customNameET.setText(contentMap.get("custname"));
+        telephoneET.setText(contentMap.get("phone"));
+        addressET.setText(contentMap.get("address"));
+        initAddressLayout();
+    }
+
+    private void initAddressLayout() {
+        String province = contentMap.get("province");
+        String city = contentMap.get("city");
+        String area = contentMap.get("area");
+        if(TextUtils.isEmpty(province)) {
+            province = Util.getPronvice(this);
+        }
+        if(TextUtils.isEmpty(city)) {
+            city = Util.getCity(this);
+        }
+        if(TextUtils.isEmpty(area)) {
+            area = Util.getArea(this);
+        }
+        addressLayout.setPronvice(province);
+        addressLayout.setCity(city);
+        addressLayout.setArea(area);
+    }
 
 }
 
