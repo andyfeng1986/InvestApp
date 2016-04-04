@@ -2,11 +2,9 @@ package com.investigatorsapp.common;
 
 import android.content.Context;
 
-import com.investigatorsapp.db.greendao.Store;
-import com.investigatorsapp.db.greendao.StoreDao;
 import com.investigatorsapp.model.BlocksResult;
 
-import java.util.List;
+import java.io.File;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -48,19 +46,23 @@ public class SalernoManager {
                     salernoHashMap.put(block.polygonno, count);
                 }
             }
-            StoreDao dao = DaoSessionInstance.getDaoSession(context).getStoreDao();
-            List<Store> storeList = dao.loadAll();
-            if(storeList != null) {
-                for(int i = 0; i < storeList.size(); i++) {
-                    Store store = storeList.get(i);
+            File destDir = new File(context.getFilesDir(),
+                    UserSingleton.getInstance().getUser().userid);
+            if(destDir.exists()) {
+                for(File file : destDir.listFiles()) {
                     try {
-                        String salerno = store.getSalerno();
+                        String salerno = file.getName();
                         int salernum = Integer.parseInt(salerno.substring(salerno.length() - 5));
-                        Integer count = salernoHashMap.get(store.getPolygonid());
+                        //readContent
+                        String content = "";
+                        int start = content.indexOf("polygonid") + 8 + 3;
+                        int end = content.indexOf("\"", start);
+                        String polygonid = content.substring(start, end);
+                        Integer count = salernoHashMap.get(polygonid);
                         if(count != null) {
                             if(salernum >= count) {
                                 count = salernum + 1;
-                                salernoHashMap.put(store.getPolygonid(), count);
+                                salernoHashMap.put(polygonid, count);
                             }
                         }
                     } catch (Exception e ) {
@@ -68,6 +70,28 @@ public class SalernoManager {
                     }
                 }
             }
+
+
+//            StoreDao dao = DaoSessionInstance.getDaoSession(context).getStoreDao();
+//            List<Store> storeList = dao.loadAll();
+//            if(storeList != null) {
+//                for(int i = 0; i < storeList.size(); i++) {
+//                    Store store = storeList.get(i);
+//                    try {
+//                        String salerno = store.getSalerno();
+//                        int salernum = Integer.parseInt(salerno.substring(salerno.length() - 5));
+//                        Integer count = salernoHashMap.get(store.getPolygonid());
+//                        if(count != null) {
+//                            if(salernum >= count) {
+//                                count = salernum + 1;
+//                                salernoHashMap.put(store.getPolygonid(), count);
+//                            }
+//                        }
+//                    } catch (Exception e ) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
         }
     }
 

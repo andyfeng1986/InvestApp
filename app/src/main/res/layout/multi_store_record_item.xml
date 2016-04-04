@@ -7,8 +7,8 @@
         android:id="@+id/tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:text="产品分销" />
+        android:layout_marginLeft="@dimen/store_record_left_margin"
+        android:layout_centerVertical="true" />
 
     <Button
         android:id="@+id/btn"

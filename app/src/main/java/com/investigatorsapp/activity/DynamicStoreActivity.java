@@ -25,7 +25,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.GsonRequest;
 import com.investigatorsapp.R;
 import com.investigatorsapp.adapter.ChoiceAdapter;
-import com.investigatorsapp.adapter.DistributionAdapter;
 import com.investigatorsapp.common.LocationReport;
 import com.investigatorsapp.common.SalernoManager;
 import com.investigatorsapp.common.UserSingleton;
@@ -66,6 +65,9 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
     private Survey mSurvey;
     private String mEnterTime;
 
+    private TextView hintTV;
+    private ViewGroup allVG;
+
     private Button saveBtn;
     private Button commitBtn;
 
@@ -97,6 +99,12 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
                 + ", mPolyname = " + mPolyname);
 
         mEnterTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+
+        hintTV = (TextView) findViewById(R.id.hint_tv);
+        allVG = (ViewGroup) findViewById(R.id.allLL);
+        hintTV.setVisibility(View.VISIBLE);
+        allVG.setVisibility(View.GONE);
+
         mContentLL = (LinearLayout)findViewById(R.id.content_ll);
 
         initFixUI();
@@ -121,6 +129,8 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
             public void onResponse(Survey response) {
                 mSurvey = response;
                 initDynamicUI(response);
+                hintTV.setVisibility(View.GONE);
+                allVG.setVisibility(View.VISIBLE);
             }
         }, new Response.ErrorListener() {
                 @Override
@@ -183,6 +193,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
                     (int) getResources().getDimension(R.dimen.y100));
             layoutParams.topMargin = (int) getResources().getDimension(R.dimen.y10);
             view.setLayoutParams(layoutParams);
+            mContentLL.addView(view);
             TextView tv = (TextView) view.findViewById(R.id.tv);
             final Button btn = (Button) view.findViewById(R.id.btn);
             if(question.must == 1) {
@@ -240,22 +251,23 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
                         stringBuilder.append(adapter.getTexts().get(i)).append(",");
                     }
                 }
+                String text = "请选择";
                 if (stringBuilder.length() > 0) {
-                    String text = stringBuilder.subSequence(0, stringBuilder.length() - 1).toString();
-                    btn.setText(text);
+                    text = stringBuilder.subSequence(0, stringBuilder.length() - 1).toString();
                 }
+                btn.setText(text);
             }
         });
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                                     long arg3) {
-                DistributionAdapter.ViewHolder holder =
-                        (DistributionAdapter.ViewHolder) arg1.getTag();
+                ChoiceAdapter.ViewHolder holder =
+                        (ChoiceAdapter.ViewHolder) arg1.getTag();
                 holder.cb.toggle();
                 List<Boolean> selecteds = adapter.getSelecteds();
                 selecteds.set(arg2, holder.cb.isChecked());
-                if(adapter.isMulti()) {
+                if(!adapter.isMulti()) {
                     if(selecteds.get(arg2)) {
                         for(int i = 0; i < adapter.getCount(); i++) {
                             if(i != arg2) {
@@ -276,6 +288,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
                     (int) getResources().getDimension(R.dimen.y100));
             layoutParams.topMargin = (int) getResources().getDimension(R.dimen.y10);
             view.setLayoutParams(layoutParams);
+            mContentLL.addView(view);
             TextView tv = (TextView) view.findViewById(R.id.tv);
             EditText et = (EditText) view.findViewById(R.id.et);
             if(question.must == 1) {

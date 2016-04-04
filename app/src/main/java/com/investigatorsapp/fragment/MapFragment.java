@@ -48,7 +48,7 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.utils.SpatialRelationUtil;
 import com.google.gson.Gson;
 import com.investigatorsapp.R;
-import com.investigatorsapp.activity.StoreRecordActivity;
+import com.investigatorsapp.activity.DynamicStoreActivity;
 import com.investigatorsapp.common.LocationReport;
 import com.investigatorsapp.common.SalernoManager;
 import com.investigatorsapp.common.UserSingleton;
@@ -402,7 +402,7 @@ public class MapFragment extends Fragment implements BaiduMap.OnMapLongClickList
             Toast.makeText(getActivity(), "当前位置不在划分区域内，请重新选择",
                     Toast.LENGTH_SHORT).show();
         } else {
-            Intent intent = new Intent(getActivity(), StoreRecordActivity.class);
+            Intent intent = new Intent(getActivity(), DynamicStoreActivity.class);
             intent.putExtra("polygonid", polygonno);
             String salerno = String.valueOf(SalernoManager.getInstance().
                     getSalernoHashMap().get(polygonno));

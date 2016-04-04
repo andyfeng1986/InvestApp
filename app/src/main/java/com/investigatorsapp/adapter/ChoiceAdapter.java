@@ -74,7 +74,7 @@ public class ChoiceAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         holder.tv.setText(texts.get(position));
-        if(icons == null) {
+        if(icons == null || icons.size() == 0) {
             holder.iv.setVisibility(View.GONE);
         }else {
             VolleySingleton.getInstance().getImageLoader().get(icons.get(position),
