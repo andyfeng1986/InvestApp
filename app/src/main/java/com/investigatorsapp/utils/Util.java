@@ -17,7 +17,9 @@ import com.investigatorsapp.model.Gps;
 import com.investigatorsapp.model.LatLng;
 import com.investigatorsapp.network.FileUploaderAsyncHttp;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -320,6 +322,32 @@ public class Util {
                 }
             }
         }
+    }
+
+    public static String readFileToString(File file) {
+        if(file.exists()) {
+            BufferedReader bufferReader = null;
+            try {
+                bufferReader = new BufferedReader(new FileReader(file));
+                String line;
+                StringBuilder stringBuilder = new StringBuilder();
+                while ((line = bufferReader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                return stringBuilder.toString();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if(bufferReader != null) {
+                    try {
+                        bufferReader.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return "";
     }
 
 

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,6 @@ import com.investigatorsapp.utils.UrlWrapper;
 import com.investigatorsapp.utils.Util;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -133,24 +133,16 @@ public class StoreFragmentNew extends Fragment implements View.OnClickListener{
         if(!destDir.exists()) {
             return;
         }
-        for(File file : destDir.listFiles()) {
-            try {
-                FileInputStream inputStream = new FileInputStream(file);
-                byte[] buffer = new byte[(int)file.length()];
-                int readCount = 0;
-                long left = file.length();
-                while(left > 0) {
-                    readCount = inputStream.read(buffer, 0 , 1024);
-                    if(readCount <= 0) {
-                        break;
-                    }
-                    left = file.length() - readCount;
+        File[] fileList = destDir.listFiles();
+        if(fileList != null && fileList.length > 0) {
+            for(File file : fileList) {
+                String result = Util.readFileToString(file);
+                if(TextUtils.isEmpty(result)) {
+                    file.delete();
+                }else {
+                    salerno2ContentMap.put(file.getName(), result);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-            String result = "";
-            salerno2ContentMap.put(file.getName(), result);
         }
     }
 

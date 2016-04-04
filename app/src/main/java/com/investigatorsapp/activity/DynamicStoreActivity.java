@@ -56,6 +56,61 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
 
     private static final String TAG = DynamicStoreActivity.class.getSimpleName();
 
+//    private static class MediaRecorderHandler extends Handler {
+//
+//        private WeakReference<StoreRecordActivity> weakReference;
+//
+//        public MediaRecorderHandler(StoreRecordActivity activity) {
+//            weakReference = new WeakReference<StoreRecordActivity>(activity);
+//        }
+//
+//        @Override
+//        public void handleMessage(Message msg) {
+//            StoreRecordActivity activity = weakReference.get();
+//            if(activity != null) {
+//                activity.stopMediaRecorder();
+//            }
+//        }
+//    }
+//
+//    private class GetDataAsyncTask extends AsyncTask<String, Void, Store> {
+//
+//        @Override
+//        protected Store doInBackground(String... params) {
+//            String salerno = params[0];
+//            StoreDao dao = DaoSessionInstance.getDaoSession(StoreRecordActivity.this).getStoreDao();
+//            QueryBuilder<Store> queryBuilder = dao.queryBuilder();
+//            Store store = queryBuilder.where(StoreDao.Properties.Salerno.eq(salerno)).build().unique();
+//            return store;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Store store) {
+//            hintTV.setVisibility(View.GONE);
+//            contentVG.setVisibility(View.VISIBLE);
+//            if(store != null) {
+//                mStore = store;
+//                mPolygonid = mStore.getPolygonid();
+//                mLat1 = mStore.getLat1();
+//                mLng1 = mStore.getLng1();
+//                mPolyname = mStore.getPolygonname();
+//                mEnterTime = mStore.getTime();
+//                setUI(store);
+//            }else {
+//                mEnterTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+//                polynameTV.setText("区块: " + mPolyname);
+//                latTV.setText("纬度: " + mLat1);
+//                lngTV.setText("经度: " + mLng1);
+//                startMediaRecorder();
+//                mediaRecorderHandler = new MediaRecorderHandler(StoreRecordActivity.this);
+//                mediaRecorderHandler.sendEmptyMessageDelayed(0, 20 * 60 * 1000);
+//            }
+//            initAddressLayout(store);
+//        }
+//    }
+//
+//    private MediaRecorderHandler mediaRecorderHandler;
+
     private String mSalerNo;
     private String mPolygonid;
     private String mLatb;
@@ -118,6 +173,13 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void getData() {
+        if(TextUtils.isEmpty(mSalerNo)) {
+            Toast.makeText(this, "无法获取店面编号", Toast.LENGTH_LONG).show();
+            finish();
+        } else {
+//            GetDataAsyncTask asyncTask = new GetDataAsyncTask();
+//            asyncTask.execute(mSalerNo);
+        }
         getSurvey();
     }
 
@@ -145,6 +207,8 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
     private void initFixUI() {
         commitBtn = (Button) findViewById(R.id.commitBtn);
         saveBtn = (Button) findViewById(R.id.saveBtn);
+        commitBtn.setOnClickListener(this);
+        saveBtn.setOnClickListener(this);
         customNameLL = (ViewGroup)findViewById(R.id.include_customname);
         customNameET = (EditText) customNameLL.findViewById(R.id.et);
         customNameET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(128)});
@@ -263,7 +327,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
                         stringBuilder.append(adapter.getTexts().get(i)).append(",");
                     }
                 }
-                String text = "请选择";
+                String text = "";
                 if (stringBuilder.length() > 0) {
                     text = stringBuilder.subSequence(0, stringBuilder.length() - 1).toString();
                 }
@@ -412,6 +476,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
             }
             SalernoManager.getInstance().updatePolycountHashMap(mPolygonid);
             Toast.makeText(this, "问卷已保存, 请后续在店面页面提交", Toast.LENGTH_LONG).show();
+            finish();
         }
     }
 
@@ -577,11 +642,11 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
     }
 
     private boolean checkInput() {
-        File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
-        if(!file.exists()) {
-            Toast.makeText(this, "未拍照，请拍照后再保存或提交", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+//        File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
+//        if(!file.exists()) {
+//            Toast.makeText(this, "未拍照，请拍照后再保存或提交", Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
         if(TextUtils.isEmpty(customNameET.getText().toString())) {
             Toast.makeText(this, "客户名称不能为空", Toast.LENGTH_SHORT).show();
             return false;

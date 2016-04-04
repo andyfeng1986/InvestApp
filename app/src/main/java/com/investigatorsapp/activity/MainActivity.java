@@ -12,7 +12,7 @@ import android.view.View.OnClickListener;
 import com.investigatorsapp.R;
 import com.investigatorsapp.fragment.MapFragment;
 import com.investigatorsapp.fragment.MeFragment;
-import com.investigatorsapp.fragment.StoreFragment;
+import com.investigatorsapp.fragment.StoreFragmentNew;
 import com.investigatorsapp.logger.Logger;
 import com.investigatorsapp.widget.ChangeColorIconWithTextView;
 import com.investigatorsapp.widget.ViewPagerCompat;
@@ -46,7 +46,7 @@ public class MainActivity extends FragmentActivity implements
         MapFragment mapFragment = new MapFragment();
         mTabs.add(mapFragment);
 
-        StoreFragment storeFragment = new StoreFragment();
+        StoreFragmentNew storeFragment = new StoreFragmentNew();
         mTabs.add(storeFragment);
 
         MeFragment meFragment = new MeFragment();
