@@ -230,6 +230,18 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         if(textList.size() == 0) {
             return;
         }
+        String btnText = btn.getText().toString();
+        if(!TextUtils.isEmpty(btnText)) {
+            String[] strings = btnText.split(",");
+            for(int i = 0; i < strings.length; i++) {
+                for(int j = 0; j < textList.size(); j++) {
+                    if(strings[i] != null && strings[i].equals(textList.get(j))) {
+                        selecteds.set(j, true);
+                        break;
+                    }
+                }
+            }
+        }
         boolean isMulti = false;
         if("multi".equals(question.type)) {
             isMulti = true;
