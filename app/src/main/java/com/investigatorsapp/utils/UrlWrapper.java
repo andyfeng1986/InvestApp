@@ -188,6 +188,23 @@ public class UrlWrapper {
         return "";
     }
 
+    public static String getDynamicPostStoreUrl() {
+        return BASE_URL + "/postQst2";
+    }
+
+    public static String getDynamicPostStoreParams(String storeJson) {
+        try {
+            return storeJson;
+//            return URLEncoder.encode(storeJson, ENCODE);
+//            StringBuilder stringBuilder = new StringBuilder();
+//            stringBuilder.append("data=").append(URLEncoder.encode(storeJson, ENCODE));
+//            return stringBuilder.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
 //    public static String getLocReportParams(Context context) {
 //        LocReport locReport = new LocReport();
 //        locReport.type = "postTrace";

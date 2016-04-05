@@ -8,8 +8,8 @@
         android:id="@+id/store_name_tv"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/y60"
+        android:layout_marginTop="@dimen/y30"
         android:layout_marginLeft="@dimen/x12"
-        android:layout_gravity="center_vertical"
         android:textSize="20sp"
         android:gravity="center" />
 

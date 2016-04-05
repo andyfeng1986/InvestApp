@@ -24,7 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.GsonRequest;
 import com.investigatorsapp.R;
-import com.investigatorsapp.activity.StoreRecordActivity;
+import com.investigatorsapp.activity.DynamicStoreActivity;
 import com.investigatorsapp.common.LocationReport;
 import com.investigatorsapp.common.UserSingleton;
 import com.investigatorsapp.common.VolleySingleton;
@@ -180,7 +180,7 @@ public class StoreFragmentNew extends Fragment implements View.OnClickListener{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        Intent intent = new Intent(getActivity(), StoreRecordActivity.class);
+                        Intent intent = new Intent(getActivity(), DynamicStoreActivity.class);
                         intent.putExtra("salerno", name2SalernoMap.get(name));
                         startActivity(intent);
                     }

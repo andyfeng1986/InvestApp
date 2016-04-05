@@ -201,7 +201,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(DynamicStoreActivity.this, "无法获取店面编号", Toast.LENGTH_LONG).show();
+                    Toast.makeText(DynamicStoreActivity.this, "无法获取问卷格式信息", Toast.LENGTH_LONG).show();
                     finish();
                 }
             });
@@ -500,8 +500,8 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
             String resultGsonString = new StringBuilder().append("{\"type\":\"postQst2\",")
                     .append(string).append("}").toString();
             GsonRequest<StoreUpload> gsonRequest = new GsonRequest<StoreUpload>(Request.Method.POST,
-                    UrlWrapper.getPostStoreUrl(), StoreUpload.class,
-                    UrlWrapper.getPostStoreParams(resultGsonString), new Response.Listener<StoreUpload>() {
+                    UrlWrapper.getDynamicPostStoreUrl(), StoreUpload.class,
+                    UrlWrapper.getDynamicPostStoreParams(resultGsonString), new Response.Listener<StoreUpload>() {
                 @Override
                 public void onResponse(StoreUpload response) {
                     if(response != null) {
@@ -570,6 +570,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
 
     private void commitSuccess() {
         SalernoManager.getInstance().updatePolycountHashMap(mPolygonid);
+        deleteFile();
         Toast.makeText(this, "上传成功", Toast.LENGTH_LONG).show();
         dissmissProgress();
         finish();
@@ -584,12 +585,28 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         dissmissProgress();
     }
 
+    private void deleteFile() {
+        File destDir = new File(getFilesDir(), UserSingleton.getInstance().getUser().userid);
+        if(destDir.exists()) {
+            File[] fileList = destDir.listFiles();
+            if(fileList != null && fileList.length > 0) {
+                for(File file : fileList) {
+                    if(file.getName().equals(mSalerNo)) {
+                        file.delete();
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     private String genCommitString() {
         StringBuilder sb = new StringBuilder();
         sb.append(appendString("userid", UserSingleton.getInstance().getUser().userid));
         sb.append(",").append(appendString("jobid", UserSingleton.getInstance().getUser().jobid));
         sb.append(",").append(appendString("token", UserSingleton.getInstance().getUser().token));
         sb.append(",").append(appendString("polygonid", mPolygonid));
+        sb.append(",").append(appendString("polyname", mPolyname));
         sb.append(",").append(appendString("salerno", mSalerNo));
         sb.append(",").append(appendString("create_time", mEnterTime));
         sb.append(",").append(appendString("custname", customNameET.getText().toString()));
