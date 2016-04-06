@@ -3,11 +3,15 @@ package com.investigatorsapp.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -42,6 +46,7 @@ import com.investigatorsapp.utils.UrlWrapper;
 import com.investigatorsapp.utils.Util;
 import com.investigatorsapp.widget.AddressLayout;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
@@ -141,6 +146,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
     private TextView polynameTV;
     private TextView latTV;
     private TextView lngTV;
+    private Button photoBtn;
     private ViewGroup customNameLL;
     private ViewGroup telphoneLL;
     private ViewGroup addressLL;
@@ -217,8 +223,10 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
 
         commitBtn = (Button) findViewById(R.id.commitBtn);
         saveBtn = (Button) findViewById(R.id.saveBtn);
+        photoBtn = (Button) findViewById(R.id.photoBtn);
         commitBtn.setOnClickListener(this);
         saveBtn.setOnClickListener(this);
+        photoBtn.setOnClickListener(this);
         polynameTV = (TextView) findViewById(R.id.polyname);
         latTV = (TextView) findViewById(R.id.lat);
         lngTV = (TextView) findViewById(R.id.lng);
@@ -469,6 +477,8 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         } else if(v.equals(commitBtn)) {
             commit();
             LocationReport.reportLocation(this);
+        } else if(v.equals(photoBtn)) {
+            clickPhotoBtn();
         }
     }
 
@@ -614,7 +624,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         sb.append(",").append(appendString("address", addressET.getText().toString()));
         sb.append(",").append(appendString("province", addressLayout.getPronvice()));
         sb.append(",").append(appendString("city", addressLayout.getCity()));
-        sb.append(",").append(appendString("area", addressLayout.getArea()));
+        sb.append(",").append(appendString("district", addressLayout.getArea()));
         sb.append(",").append(appendString("lat_b", mLatb));
         sb.append(",").append(appendString("lng_b", mLngb));
         try {
@@ -757,7 +767,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
     private void initAddressLayout() {
         String province = contentMap.get("province");
         String city = contentMap.get("city");
-        String area = contentMap.get("area");
+        String area = contentMap.get("district");
         if(TextUtils.isEmpty(province)) {
             province = Util.getPronvice(this);
         }
@@ -770,6 +780,64 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         addressLayout.setPronvice(province);
         addressLayout.setCity(city);
         addressLayout.setArea(area);
+    }
+
+    private void clickPhotoBtn() {
+        File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
+        Logger.d(TAG, "file path = " + file.getAbsolutePath());
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+        startActivityForResult(intent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
+                Bitmap bitmap = getSmallBitmap(file.getAbsolutePath());
+                saveImage(bitmap, file.getAbsolutePath());
+            }
+        }
+    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options,int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            final int heightRatio = Math.round((float) height/ (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+        }
+        return inSampleSize;
+    }
+
+    public static Bitmap getSmallBitmap(String filePath) {
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, 240, 320);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+
+        return BitmapFactory.decodeFile(filePath, options);
+    }
+
+    public static void saveImage(Bitmap photo, String spath) {
+        try {
+            BufferedOutputStream bos = new BufferedOutputStream(
+                    new FileOutputStream(spath, false));
+            photo.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            bos.flush();
+            bos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

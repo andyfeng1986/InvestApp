@@ -73,6 +73,8 @@ public class StoreFragmentNew extends Fragment implements View.OnClickListener{
     public void onResume() {
         Logger.d(TAG, "onResume");
         super.onResume();
+        salerno2ContentMap.clear();
+        name2SalernoMap.clear();
         getData();
     }
 
