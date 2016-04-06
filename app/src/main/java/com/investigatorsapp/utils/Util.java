@@ -363,6 +363,15 @@ public class Util {
                     String key = inStrings[0].substring(1, inStrings[0].length() - 1);
                     String value = inStrings[1].substring(1, inStrings[1].length() - 1);
                     map.put(key, value);
+                }else {
+                    try {
+                        int index = strings[i].indexOf(":");
+                        String key = strings[i].substring(1, index - 1);
+                        String value = strings[i].substring(index + 2, strings[i].length() - 1);
+                        map.put(key, value);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
