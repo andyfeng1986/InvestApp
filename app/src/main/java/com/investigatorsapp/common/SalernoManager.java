@@ -47,8 +47,7 @@ public class SalernoManager {
                     salernoHashMap.put(block.polygonno, count);
                 }
             }
-            File destDir = new File(context.getFilesDir(),
-                    UserSingleton.getInstance().getUser().userid);
+            File destDir = new File(Util.getDataDirPath(context));
             if(destDir.exists()) {
                 for(File file : destDir.listFiles()) {
                     try {

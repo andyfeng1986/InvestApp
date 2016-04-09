@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.investigatorsapp.app.MyApp;
+import com.investigatorsapp.common.UserSingleton;
 import com.investigatorsapp.model.Gps;
 import com.investigatorsapp.model.LatLng;
 import com.investigatorsapp.network.FileUploaderAsyncHttp;
@@ -378,7 +379,10 @@ public class Util {
         return map;
     }
 
-
+    public static String getDataDirPath(Context context) {
+        return context.getFilesDir().getPath() + "/" + UserSingleton.getInstance().getUser().userid
+                + "/" + UserSingleton.getInstance().getUser().jobid;
+    }
 
     public static String geoJsonString = "{\n" +
             "    \"retcode\": \"0000\",\n" +

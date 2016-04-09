@@ -86,7 +86,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
 
         @Override
         protected String doInBackground(String... params) {
-            File destDir = new File(getFilesDir(), UserSingleton.getInstance().getUser().userid);
+            File destDir = new File(Util.getDataDirPath(DynamicStoreActivity.this));
             if(destDir.exists()) {
                 File[] fileList = destDir.listFiles();
                 if(fileList != null && fileList.length > 0) {
@@ -485,7 +485,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
     private void save() {
         if(checkInput()) {
             stopAudio();
-            File destDir = new File(getFilesDir(), UserSingleton.getInstance().getUser().userid);
+            File destDir = new File(Util.getDataDirPath(this));
             if (!destDir.exists()) {
                 destDir.mkdirs();
             }
@@ -596,7 +596,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void deleteFile() {
-        File destDir = new File(getFilesDir(), UserSingleton.getInstance().getUser().userid);
+        File destDir = new File(Util.getDataDirPath(this));
         if(destDir.exists()) {
             File[] fileList = destDir.listFiles();
             if(fileList != null && fileList.length > 0) {

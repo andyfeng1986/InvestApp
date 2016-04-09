@@ -26,7 +26,6 @@ import com.android.volley.toolbox.GsonRequest;
 import com.investigatorsapp.R;
 import com.investigatorsapp.activity.DynamicStoreActivity;
 import com.investigatorsapp.common.LocationReport;
-import com.investigatorsapp.common.UserSingleton;
 import com.investigatorsapp.common.VolleySingleton;
 import com.investigatorsapp.logger.Logger;
 import com.investigatorsapp.model.StoreUpload;
@@ -131,7 +130,7 @@ public class StoreFragmentNew extends Fragment implements View.OnClickListener{
     }
 
     private void initSaveData() {
-        File destDir = new File(getActivity().getFilesDir(), UserSingleton.getInstance().getUser().userid);
+        File destDir = new File(Util.getDataDirPath(getActivity()));
         if(!destDir.exists()) {
             return;
         }
@@ -235,7 +234,7 @@ public class StoreFragmentNew extends Fragment implements View.OnClickListener{
     }
 
     private void deleteItemFile(String fileName) {
-        File destDir = new File(getActivity().getFilesDir(), UserSingleton.getInstance().getUser().userid);
+        File destDir = new File(Util.getDataDirPath(getActivity()));
         if(!destDir.exists()) {
             return;
         }
