@@ -248,7 +248,6 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
 
     private void initDynamicUI(Survey survey) {
         if(survey != null) {
-            startAudio(survey);
             initPhoto(survey);
             if(survey.questions != null) {
                 for(int i = 0; i < survey.questions.size(); i++) {
