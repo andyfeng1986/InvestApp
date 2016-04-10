@@ -279,30 +279,30 @@ public class StoreFragment extends Fragment implements View.OnClickListener{
     private void uploadPhoto(final int pos, final boolean commitOne) {
         Store store = myAdapter.getStoreList().get(pos);
         final String salerno = store.getSalerno();
-        final File file = new File(Util.getPhotoFilePath(salerno, store.getTime()));
-        if(file.exists()) {
-            Util.uploadPhotoFile(salerno, store.getTime(), new FileUploaderAsyncHttp.UpLoaderCallback() {
-                @Override
-                public void onSuccess(String response) {
-                    if (file != null && file.exists()) {
-                        file.delete();
-                    }
-                    uploadAudio(pos, commitOne);
-                }
-
-                @Override
-                public void onFailed(int responseCode, String failReason) {
-                    if (commitOne) {
-                        Toast.makeText(getActivity(), "上传失败 : " + failReason, Toast.LENGTH_LONG).show();
-                        dissmissProgress();
-                    } else {
-                        commitNext(pos, false);
-                    }
-                }
-            });
-        }else {
-            uploadAudio(pos, commitOne);
-        }
+//        final File file = new File(Util.getPhotoFilePath(salerno, store.getTime()));
+//        if(file.exists()) {
+//            Util.uploadPhotoFile(salerno, store.getTime(), new FileUploaderAsyncHttp.UpLoaderCallback() {
+//                @Override
+//                public void onSuccess(String response) {
+//                    if (file != null && file.exists()) {
+//                        file.delete();
+//                    }
+//                    uploadAudio(pos, commitOne);
+//                }
+//
+//                @Override
+//                public void onFailed(int responseCode, String failReason) {
+//                    if (commitOne) {
+//                        Toast.makeText(getActivity(), "上传失败 : " + failReason, Toast.LENGTH_LONG).show();
+//                        dissmissProgress();
+//                    } else {
+//                        commitNext(pos, false);
+//                    }
+//                }
+//            });
+//        }else {
+//            uploadAudio(pos, commitOne);
+//        }
     }
 
     private void uploadAudio(final int pos, final boolean commitOne) {

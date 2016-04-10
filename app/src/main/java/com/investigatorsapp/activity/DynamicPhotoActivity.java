@@ -79,7 +79,7 @@ public class DynamicPhotoActivity extends BaseActivity implements View.OnClickLi
     private void setUI() {
         for(int i = 0; i < viewHolderList.size(); i++) {
             viewHolderList.get(i).btn.setText(photoTextList.get(i));
-            File file = new File(Util.getPhotoFilePath(mSalerNo + "_" +
+            File file = new File(Util.getPhotoFilePath(mSalerNo,
                     photoNoList.get(i), mEnterTime));
             if(file.exists()) {
                 Bitmap bitmap = Util.getSmallBitmap(file.getAbsolutePath());
@@ -100,7 +100,7 @@ public class DynamicPhotoActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void clickPhotoBtn(int index) {
-        File file = new File(Util.getPhotoFilePath(mSalerNo + "_" + photoNoList.get(index), mEnterTime));
+        File file = new File(Util.getPhotoFilePath(mSalerNo, photoNoList.get(index), mEnterTime));
         Logger.d(TAG, "file path = " + file.getAbsolutePath());
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
@@ -108,7 +108,7 @@ public class DynamicPhotoActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void clickImageView(int index) {
-        String path = Util.getPhotoFilePath(mSalerNo + "_" + photoNoList.get(index), mEnterTime);
+        String path = Util.getPhotoFilePath(mSalerNo, photoNoList.get(index), mEnterTime);
         Intent intent = new Intent(this, DisplayPhotoActivity.class);
         intent.putExtra("path", path);
         startActivity(intent);
@@ -118,7 +118,7 @@ public class DynamicPhotoActivity extends BaseActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                File file = new File(Util.getPhotoFilePath(mSalerNo + "_" +
+                File file = new File(Util.getPhotoFilePath(mSalerNo,
                         photoNoList.get(mCurIndex), mEnterTime));
                 Bitmap bitmap = Util.getSmallBitmap(file.getAbsolutePath());
                 viewHolderList.get(mCurIndex).iv.setImageBitmap(bitmap);

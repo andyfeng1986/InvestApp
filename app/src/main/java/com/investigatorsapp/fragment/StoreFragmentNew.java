@@ -330,22 +330,61 @@ public class StoreFragmentNew extends Fragment implements View.OnClickListener{
     }
 
     private void uploadPhoto(final int pos, final boolean commitOne) {
-        String storeName = myAdapter.getStoreList().get(pos);
-        final String salerno = name2SalernoMap.get(storeName);
-        String content = salerno2ContentMap.get(salerno);
-        int start = content.indexOf("create_time") + 8 + 3;
-        int end = content.indexOf("\"", start);
-        String createTime = content.substring(start, end);
+//        String storeName = myAdapter.getStoreList().get(pos);
+//        final String salerno = name2SalernoMap.get(storeName);
+//        String content = salerno2ContentMap.get(salerno);
+//        int start = content.indexOf("create_time") + 8 + 3;
+//        int end = content.indexOf("\"", start);
+//        String createTime = content.substring(start, end);
+//        final File file = new File(Util.getPhotoFilePath(salerno, createTime));
+//        String photoName = salerno2ContentMap.get("photoname1");
+//        final File file = new File(Util.getPhotoFilePath(photoName));
+//        if(!TextUtils.isEmpty(photoName) && file.exists()) {
+//            Util.uploadPhotoFile(photoName, new FileUploaderAsyncHttp.UpLoaderCallback() {
+//                @Override
+//                public void onSuccess(String response) {
+//                    uploadPhoto(pos, 2, commitOne);
+////                    if (file != null && file.exists()) {
+////                        file.delete();
+////                    }
+////                    uploadAudio(pos, commitOne);
+//                }
+//
+//                @Override
+//                public void onFailed(int responseCode, String failReason) {
+//                    if (commitOne) {
+//                        Toast.makeText(getActivity(), "上传失败 : " + failReason, Toast.LENGTH_LONG).show();
+//                        dissmissProgress();
+//                    } else {
+//                        commitNext(pos, false);
+//                    }
+//                }
+//            });
+//        }else {
+//            uploadAudio(pos, commitOne);
+//        }
+        uploadPhoto(pos, 1, commitOne);
+    }
 
-        final File file = new File(Util.getPhotoFilePath(salerno, createTime));
-        if(file.exists()) {
-            Util.uploadPhotoFile(salerno, createTime, new FileUploaderAsyncHttp.UpLoaderCallback() {
+    private void uploadPhoto(final int pos, final int photoIndex, final boolean commitOne) {
+//        String storeName = myAdapter.getStoreList().get(pos);
+//        final String salerno = name2SalernoMap.get(storeName);
+//        String content = salerno2ContentMap.get(salerno);
+//        int start = content.indexOf("create_time") + 8 + 3;
+//        int end = content.indexOf("\"", start);
+//        String createTime = content.substring(start, end);
+//        final File file = new File(Util.getPhotoFilePath(salerno, createTime));
+        String photoName = salerno2ContentMap.get("photoname" + photoIndex);
+        final File file = new File(Util.getPhotoFilePath(photoName));
+        if(!TextUtils.isEmpty(photoName) && file.exists()) {
+            Util.uploadPhotoFile(photoName, new FileUploaderAsyncHttp.UpLoaderCallback() {
                 @Override
                 public void onSuccess(String response) {
-                    if (file != null && file.exists()) {
-                        file.delete();
-                    }
-                    uploadAudio(pos, commitOne);
+//                    if (file != null && file.exists()) {
+//                        file.delete();
+//                    }
+//                    uploadAudio(pos, commitOne);
+                    uploadPhoto(pos, photoIndex + 1, commitOne);
                 }
 
                 @Override

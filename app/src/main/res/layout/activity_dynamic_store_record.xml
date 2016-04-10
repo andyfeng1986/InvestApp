@@ -69,6 +69,7 @@
                     android:layout_marginTop="@dimen/y10"/>
 
                 <RelativeLayout
+                    android:id="@+id/photoLL"
                     android:layout_width="match_parent"
                     android:layout_marginLeft="@dimen/store_record_left_margin"
                     android:layout_height="@dimen/y100"

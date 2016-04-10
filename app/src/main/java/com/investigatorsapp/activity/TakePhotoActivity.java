@@ -13,12 +13,8 @@ import android.widget.Button;
 
 import com.investigatorsapp.R;
 import com.investigatorsapp.logger.Logger;
-import com.investigatorsapp.utils.Util;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -68,18 +64,18 @@ public class TakePhotoActivity extends Activity implements View.OnClickListener,
     private void saveImage(byte[] data) {
 //        String fileName = Environment.getExternalStorageDirectory().getAbsolutePath()
 //                + "/img.jpeg";
-        String fileName = Util.getPhotoFilePath(mSalerNo, mEnterTime);
-        Logger.i(TAG, "fileName = " + fileName + ", data = " + data.length);
-        File file = new File(fileName);
-        try {
-            OutputStream os = new FileOutputStream(file);
-            os.write(data, 0, data.length);
-            os.close();
-            setPictureDegree(file.getPath(), String.valueOf(ExifInterface.ORIENTATION_ROTATE_90));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        isPreviewCapturing = false;
+//        String fileName = Util.getPhotoFilePath(mSalerNo, mEnterTime);
+//        Logger.i(TAG, "fileName = " + fileName + ", data = " + data.length);
+//        File file = new File(fileName);
+//        try {
+//            OutputStream os = new FileOutputStream(file);
+//            os.write(data, 0, data.length);
+//            os.close();
+//            setPictureDegree(file.getPath(), String.valueOf(ExifInterface.ORIENTATION_ROTATE_90));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        isPreviewCapturing = false;
     }
 
     @Override
@@ -188,35 +184,35 @@ public class TakePhotoActivity extends Activity implements View.OnClickListener,
 
     @Override
     public void onClick(View v) {
-        if(v.equals(commitBtn)) {
-            finish();
-        }else if(v.equals(exitBtn)) {
-            String fileName = Util.getPhotoFilePath(mSalerNo, mEnterTime);
-            File file = new File(fileName);
-            if(file.exists()) {
-                file.delete();
-            }
-            finish();
-        }else if(v.equals(retakeBtn)) {
-            if(!isPreviewCapturing) {
-                String fileName = Util.getPhotoFilePath(mSalerNo, mEnterTime);
-                File file = new File(fileName);
-                if(file.exists()) {
-                    file.delete();
-                }
-                afterPhotoVG.setVisibility(View.GONE);
-                takeBtn.setVisibility(View.VISIBLE);
-                mCamera.startPreview();
-            }
-//            Log.i("Test", "retakeBtn, mCamear = " + mCamera);
-//
-        }else if(v.equals(takeBtn)) {
-            isPreviewCapturing = true;
-            afterPhotoVG.setVisibility(View.VISIBLE);
-            takeBtn.setVisibility(View.GONE);
-            mCamera.takePicture(null, null, picture);
-            //mCamera.stopPreview();
-        }
+//        if(v.equals(commitBtn)) {
+//            finish();
+//        }else if(v.equals(exitBtn)) {
+//            String fileName = Util.getPhotoFilePath(mSalerNo, mEnterTime);
+//            File file = new File(fileName);
+//            if(file.exists()) {
+//                file.delete();
+//            }
+//            finish();
+//        }else if(v.equals(retakeBtn)) {
+//            if(!isPreviewCapturing) {
+//                String fileName = Util.getPhotoFilePath(mSalerNo, mEnterTime);
+//                File file = new File(fileName);
+//                if(file.exists()) {
+//                    file.delete();
+//                }
+//                afterPhotoVG.setVisibility(View.GONE);
+//                takeBtn.setVisibility(View.VISIBLE);
+//                mCamera.startPreview();
+//            }
+////            Log.i("Test", "retakeBtn, mCamear = " + mCamera);
+////
+//        }else if(v.equals(takeBtn)) {
+//            isPreviewCapturing = true;
+//            afterPhotoVG.setVisibility(View.VISIBLE);
+//            takeBtn.setVisibility(View.GONE);
+//            mCamera.takePicture(null, null, picture);
+//            //mCamera.stopPreview();
+//        }
     }
 
     @Override

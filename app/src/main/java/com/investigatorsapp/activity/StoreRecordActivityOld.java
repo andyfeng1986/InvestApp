@@ -377,17 +377,17 @@ public class StoreRecordActivityOld extends BaseActivity implements View.OnClick
     }
 
     private void uploadPhoto() {
-        Util.uploadPhotoFile(mSalerNo, mStore.getTime(), new FileUploaderAsyncHttp.UpLoaderCallback() {
-            @Override
-            public void onSuccess(String response) {
-                uploadAudio();
-            }
-
-            @Override
-            public void onFailed(int responseCode, String failReason) {
-
-            }
-        });
+//        Util.uploadPhotoFile(mSalerNo, mStore.getTime(), new FileUploaderAsyncHttp.UpLoaderCallback() {
+//            @Override
+//            public void onSuccess(String response) {
+//                uploadAudio();
+//            }
+//
+//            @Override
+//            public void onFailed(int responseCode, String failReason) {
+//
+//            }
+//        });
     }
 
     private void uploadAudio() {

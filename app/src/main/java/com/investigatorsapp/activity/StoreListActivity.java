@@ -152,17 +152,17 @@ public class StoreListActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void uploadPhoto(final Store store) {
-        Util.uploadPhotoFile(store.getSalerno(), store.getTime(), new FileUploaderAsyncHttp.UpLoaderCallback() {
-            @Override
-            public void onSuccess(String response) {
-                uploadAudio(store);
-            }
-
-            @Override
-            public void onFailed(int responseCode, String failReason) {
-
-            }
-        });
+//        Util.uploadPhotoFile(store.getSalerno(), store.getTime(), new FileUploaderAsyncHttp.UpLoaderCallback() {
+//            @Override
+//            public void onSuccess(String response) {
+//                uploadAudio(store);
+//            }
+//
+//            @Override
+//            public void onFailed(int responseCode, String failReason) {
+//
+//            }
+//        });
     }
 
     private void uploadAudio(final Store store) {

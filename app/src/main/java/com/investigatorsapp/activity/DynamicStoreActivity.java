@@ -3,14 +3,11 @@ package com.investigatorsapp.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.media.MediaRecorder;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -144,6 +141,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
     private TextView polynameTV;
     private TextView latTV;
     private TextView lngTV;
+    private ViewGroup photoLL;
     private Button photoBtn;
     private ViewGroup customNameLL;
     private ViewGroup telphoneLL;
@@ -221,6 +219,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
 
         commitBtn = (Button) findViewById(R.id.commitBtn);
         saveBtn = (Button) findViewById(R.id.saveBtn);
+        photoLL = (ViewGroup) findViewById(R.id.photoLL);
         photoBtn = (Button) findViewById(R.id.photoBtn);
         commitBtn.setOnClickListener(this);
         saveBtn.setOnClickListener(this);
@@ -250,6 +249,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
     private void initDynamicUI(Survey survey) {
         if(survey != null) {
             startAudio(survey);
+            initPhoto(survey);
             if(survey.questions != null) {
                 for(int i = 0; i < survey.questions.size(); i++) {
                     Survey.Question question = survey.questions.get(i);
@@ -266,6 +266,14 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
                     }
                 }
             }
+        }
+    }
+
+    private void initPhoto(Survey survey) {
+        if(survey != null && survey.photo != null && survey.photo.size() > 0) {
+            photoLL.setVisibility(View.VISIBLE);
+        } else {
+            photoLL.setVisibility(View.GONE);
         }
     }
 
@@ -550,21 +558,58 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void uploadPhoto() {
-        final File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
-        if(file.exists()) {
-            Util.uploadPhotoFile(mSalerNo, mEnterTime, new FileUploaderAsyncHttp.UpLoaderCallback() {
-                @Override
-                public void onSuccess(String response) {
-                    uploadAudio();
-                }
+        if(mSurvey != null && mSurvey.photo != null && mSurvey.photo.size() > 0) {
+            String filePath = Util.getPhotoFilePath(mSalerNo,
+                    mSurvey.photo.get(0).id, mEnterTime);
+            final File file = new File(filePath);
+            if(file.exists()) {
+                Util.uploadPhotoFile(mSalerNo,
+                        mSurvey.photo.get(0).id, mEnterTime, new FileUploaderAsyncHttp.UpLoaderCallback() {
+                    @Override
+                    public void onSuccess(String response) {
+                        if(mSurvey.photo.size() > 1) {
+                            uploadNextPhoto(1);
+                        } else {
+                            uploadAudio();
+                        }
+                    }
 
-                @Override
-                public void onFailed(int responseCode, String failReason) {
-                    commitFail(failReason);
-                }
-            });
-        }else {
+                    @Override
+                    public void onFailed(int responseCode, String failReason) {
+                        commitFail(failReason);
+                    }
+                });
+            } else {
+                commitFail("图片不存在");
+            }
+        } else {
             uploadAudio();
+        }
+    }
+
+    private void uploadNextPhoto(final int photoIndex ) {
+        String filePath = Util.getPhotoFilePath(mSalerNo,
+                mSurvey.photo.get(photoIndex).id, mEnterTime);
+        final File file = new File(filePath);
+        if (file.exists()) {
+            Util.uploadPhotoFile(mSalerNo,
+                    mSurvey.photo.get(photoIndex).id, mEnterTime, new FileUploaderAsyncHttp.UpLoaderCallback() {
+                        @Override
+                        public void onSuccess(String response) {
+                            if (photoIndex < mSurvey.photo.size() - 1) {
+                                uploadNextPhoto(photoIndex + 1);
+                            } else {
+                                uploadAudio();
+                            }
+                        }
+
+                        @Override
+                        public void onFailed(int responseCode, String failReason) {
+                            commitFail(failReason);
+                        }
+                    });
+        } else {
+            commitFail("图片不存在");
         }
     }
 
@@ -639,6 +684,12 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         sb.append(",").append(appendString("district", addressLayout.getArea()));
         sb.append(",").append(appendString("lat_b", mLatb));
         sb.append(",").append(appendString("lng_b", mLngb));
+        if(mSurvey != null && mSurvey.photo != null && mSurvey.photo.size() > 0) {
+            for(int i = 0; i < mSurvey.photo.size(); i++) {
+                sb.append(",").append(appendString("photoname" + mSurvey.photo.get(i).id,
+                        Util.getPhotoFilePath(mSalerNo, mSurvey.photo.get(i).id, mEnterTime)));
+            }
+        }
         try {
             Gps gps = Util.bd09_To_Gps84(Double.parseDouble(mLatb), Double.parseDouble(mLngb));
             if(gps != null) {
@@ -694,6 +745,18 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
     }
 
     private boolean checkInput() {
+        if (mSurvey != null && mSurvey.photo != null && mSurvey.photo.size() > 0) {
+            for(int i = 0; i < mSurvey.photo.size(); i++) {
+                String filePath = Util.getPhotoFilePath(mSalerNo,
+                        mSurvey.photo.get(i).id, mEnterTime);
+                final File file = new File(filePath);
+                if(!file.exists()) {
+                    Toast.makeText(this, mSurvey.photo.get(i).text + "未拍照，请拍照后再保存或提交",
+                            Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+        }
 //        File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
 //        if(!file.exists()) {
 //            Toast.makeText(this, "未拍照，请拍照后再保存或提交", Toast.LENGTH_SHORT).show();
@@ -794,24 +857,24 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         addressLayout.setArea(area);
     }
 
-    private void clickPhotoBtn() {
-        File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
-        Logger.d(TAG, "file path = " + file.getAbsolutePath());
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-        startActivityForResult(intent, 1);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
-                Bitmap bitmap = Util.getSmallBitmap(file.getAbsolutePath());
-                Util.saveImage(bitmap, file.getAbsolutePath());
-            }
-        }
-    }
+//    private void clickPhotoBtn() {
+//        File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
+//        Logger.d(TAG, "file path = " + file.getAbsolutePath());
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+//        startActivityForResult(intent, 1);
+//    }
+//
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == 1) {
+//            if (resultCode == RESULT_OK) {
+//                File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
+//                Bitmap bitmap = Util.getSmallBitmap(file.getAbsolutePath());
+//                Util.saveImage(bitmap, file.getAbsolutePath());
+//            }
+//        }
+//    }
 
 
 

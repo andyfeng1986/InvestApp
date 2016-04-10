@@ -5,13 +5,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaRecorder;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -490,11 +488,11 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
     }
 
     private boolean checkInput() {
-        File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
-        if(!file.exists()) {
-            Toast.makeText(this, "未拍照，请拍照后再保存或提交", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+//        File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
+//        if(!file.exists()) {
+//            Toast.makeText(this, "未拍照，请拍照后再保存或提交", Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
         if(TextUtils.isEmpty(customNameET.getText().toString())) {
             Toast.makeText(this, "客户名称不能为空", Toast.LENGTH_SHORT).show();
             return false;
@@ -594,25 +592,25 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void uploadPhoto() {
-        final File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
-        if(file.exists()) {
-            Util.uploadPhotoFile(mSalerNo, mEnterTime, new FileUploaderAsyncHttp.UpLoaderCallback() {
-                @Override
-                public void onSuccess(String response) {
-//                    if (file != null && file.exists()) {
-//                        file.delete();
-//                    }
-                    uploadAudio();
-                }
-
-                @Override
-                public void onFailed(int responseCode, String failReason) {
-                    commitFail(failReason);
-                }
-            });
-        }else {
-            uploadAudio();
-        }
+//        final File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
+//        if(file.exists()) {
+//            Util.uploadPhotoFile(mSalerNo, mEnterTime, new FileUploaderAsyncHttp.UpLoaderCallback() {
+//                @Override
+//                public void onSuccess(String response) {
+////                    if (file != null && file.exists()) {
+////                        file.delete();
+////                    }
+//                    uploadAudio();
+//                }
+//
+//                @Override
+//                public void onFailed(int responseCode, String failReason) {
+//                    commitFail(failReason);
+//                }
+//            });
+//        }else {
+//            uploadAudio();
+//        }
     }
 
     private void uploadAudio() {
@@ -662,11 +660,11 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
 
     private void clickPhotoBtn() {
 //my photo
-        File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
-        Logger.d(TAG, "file path = " + file.getAbsolutePath());
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
-        startActivityForResult(intent, 1);
+//        File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
+//        Logger.d(TAG, "file path = " + file.getAbsolutePath());
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(file));
+//        startActivityForResult(intent, 1);
 
 //        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //        startActivityForResult(intent, 1);
@@ -682,9 +680,9 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
 //my photo
-                File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
-                Bitmap bitmap = getSmallBitmap(file.getAbsolutePath());
-                saveImage(bitmap, file.getAbsolutePath());
+//                File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
+//                Bitmap bitmap = getSmallBitmap(file.getAbsolutePath());
+//                saveImage(bitmap, file.getAbsolutePath());
 
 //                Bitmap markPre = BitmapFactory.decodeResource(this.getResources(), R.drawable.logo);
 //                int distWidth = bm.getWidth() / 5;
@@ -896,10 +894,10 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
             store.setIsmobil("1");
         }
         store.setMonthoil(String.valueOf(avgoilSpinner.getSelectedItemPosition()));
-        File photoFile = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
-        if(photoFile.exists()) {
-            store.setPhotoname(photoFile.getName());
-        }
+//        File photoFile = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
+//        if(photoFile.exists()) {
+//            store.setPhotoname(photoFile.getName());
+//        }
         File audioFile = new File(Util.getAudioFilePath(mSalerNo, mEnterTime));
         if(audioFile.exists()) {
             store.setAudioname(audioFile.getName());

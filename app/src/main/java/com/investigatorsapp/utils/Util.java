@@ -161,9 +161,19 @@ public class Util {
         return time;
     }
 
-    public static String getPhotoFilePath(String salerNo, String dateString) {
+    public static String getPhotoFilePath(String name) {
         return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) +
-                "/" + salerNo + "_" + dataStringConvert(dateString) + ".jpg";
+                "/" + name;
+    }
+
+//    public static String getPhotoFilePath(String salerNo, String dateString) {
+//        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) +
+//                "/" + salerNo + "_" + dataStringConvert(dateString) + ".jpg";
+//    }
+
+    public static String getPhotoFilePath(String salerNo, String no, String dateString) {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) +
+                "/" + salerNo + "_" + no + "_" + dataStringConvert(dateString) + ".jpg";
     }
 
     public static String getAudioFilePath(String salerNo, String dateString) {
@@ -172,9 +182,21 @@ public class Util {
         return MyApp.app.getFilesDir() + "/" + salerNo + "_" + dataStringConvert(dateString) + ".3gp";
     }
 
-    public static void uploadPhotoFile(String salerNo, String time,
+    public static void uploadPhotoFile(String photoName,
                                        FileUploaderAsyncHttp.UpLoaderCallback upLoaderCallback) {
-        File file = new File(getPhotoFilePath(salerNo, time));
+        File file = new File(getPhotoFilePath(photoName));
+        uploadFile(UrlWrapper.getPhotoUploadUrl(), file, upLoaderCallback);
+    }
+
+//    public static void uploadPhotoFile(String salerNo, String time,
+//                                       FileUploaderAsyncHttp.UpLoaderCallback upLoaderCallback) {
+//        File file = new File(getPhotoFilePath(salerNo, time));
+//        uploadFile(UrlWrapper.getPhotoUploadUrl(), file, upLoaderCallback);
+//    }
+
+    public static void uploadPhotoFile(String salerNo, String no, String time,
+                                       FileUploaderAsyncHttp.UpLoaderCallback upLoaderCallback) {
+        File file = new File(getPhotoFilePath(salerNo, no, time));
         uploadFile(UrlWrapper.getPhotoUploadUrl(), file, upLoaderCallback);
     }
 
