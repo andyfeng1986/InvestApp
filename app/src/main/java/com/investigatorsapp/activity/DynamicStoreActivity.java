@@ -683,6 +683,10 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         sb.append(",").append(appendString("district", addressLayout.getArea()));
         sb.append(",").append(appendString("lat_b", mLatb));
         sb.append(",").append(appendString("lng_b", mLngb));
+        if(mSurvey != null && "1".equals(mSurvey.audio)) {
+            sb.append(",").append(appendString("audioname",
+                    mSalerNo + "_" + Util.dataStringConvert(mEnterTime) + ".3gp"));
+        }
         if(mSurvey != null && mSurvey.photo != null && mSurvey.photo.size() > 0) {
             for(int i = 0; i < mSurvey.photo.size(); i++) {
                 sb.append(",").append(appendString("photoname" + mSurvey.photo.get(i).id,

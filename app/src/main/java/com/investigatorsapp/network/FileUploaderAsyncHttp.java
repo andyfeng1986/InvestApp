@@ -36,6 +36,7 @@ public class FileUploaderAsyncHttp {
 			params.put("filesize", file.length());
 			params.put("uploadfile", file);
 			params.put("userid", UserSingleton.getInstance().getUser().userid);
+			params.put("jobid", UserSingleton.getInstance().getUser().jobid);
 			params.put("token", UserSingleton.getInstance().getUser().token);
 			final AsyncHttpClient client = new AsyncHttpClient();
 			client.post(url, params, new AsyncHttpResponseHandler() {
