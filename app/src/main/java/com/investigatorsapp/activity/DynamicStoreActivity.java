@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -46,7 +45,6 @@ import com.investigatorsapp.utils.UrlWrapper;
 import com.investigatorsapp.utils.Util;
 import com.investigatorsapp.widget.AddressLayout;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
@@ -478,7 +476,21 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
             commit();
             LocationReport.reportLocation(this);
         } else if(v.equals(photoBtn)) {
-            clickPhotoBtn();
+//            clickPhotoBtn();
+            if(mSurvey != null && mSurvey.photo != null && mSurvey.photo.size() > 0) {
+                Intent intent = new Intent(this, DynamicPhotoActivity.class);
+                intent.putExtra("salerno", mSalerNo);
+                intent.putExtra("enter_time", mEnterTime);
+                ArrayList<String> photoText = new ArrayList<>();
+                ArrayList<String> photoNo = new ArrayList<>();
+                for(int i = 0; i < mSurvey.photo.size(); i++) {
+                    photoText.add(mSurvey.photo.get(i).text);
+                    photoNo.add(mSurvey.photo.get(i).id);
+                }
+                intent.putStringArrayListExtra("text", photoText);
+                intent.putStringArrayListExtra("no", photoNo);
+                startActivity(intent);
+            }
         }
     }
 
@@ -795,50 +807,15 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
-                Bitmap bitmap = getSmallBitmap(file.getAbsolutePath());
-                saveImage(bitmap, file.getAbsolutePath());
+                Bitmap bitmap = Util.getSmallBitmap(file.getAbsolutePath());
+                Util.saveImage(bitmap, file.getAbsolutePath());
             }
         }
     }
 
-    public static int calculateInSampleSize(BitmapFactory.Options options,int reqWidth, int reqHeight) {
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
 
-        if (height > reqHeight || width > reqWidth) {
-            final int heightRatio = Math.round((float) height/ (float) reqHeight);
-            final int widthRatio = Math.round((float) width / (float) reqWidth);
-            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
-        }
-        return inSampleSize;
-    }
 
-    public static Bitmap getSmallBitmap(String filePath) {
-        final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(filePath, options);
 
-        // Calculate inSampleSize
-        options.inSampleSize = calculateInSampleSize(options, 240, 320);
-
-        // Decode bitmap with inSampleSize set
-        options.inJustDecodeBounds = false;
-
-        return BitmapFactory.decodeFile(filePath, options);
-    }
-
-    public static void saveImage(Bitmap photo, String spath) {
-        try {
-            BufferedOutputStream bos = new BufferedOutputStream(
-                    new FileOutputStream(spath, false));
-            photo.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-            bos.flush();
-            bos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
 }
 

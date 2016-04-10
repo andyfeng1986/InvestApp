@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -19,8 +21,10 @@ import com.investigatorsapp.model.Gps;
 import com.investigatorsapp.model.LatLng;
 import com.investigatorsapp.network.FileUploaderAsyncHttp;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -214,6 +218,45 @@ public class Util {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options,int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            final int heightRatio = Math.round((float) height/ (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+        }
+        return inSampleSize;
+    }
+
+    public static Bitmap getSmallBitmap(String filePath) {
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(filePath, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, 240, 320);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+
+        return BitmapFactory.decodeFile(filePath, options);
+    }
+
+    public static void saveImage(Bitmap photo, String spath) {
+        try {
+            BufferedOutputStream bos = new BufferedOutputStream(
+                    new FileOutputStream(spath, false));
+            photo.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            bos.flush();
+            bos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static double pi = 3.1415926535897932384626;

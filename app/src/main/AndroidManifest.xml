@@ -88,6 +88,14 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar">
         </activity>
+        <activity android:name=".activity.DynamicPhotoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity android:name=".activity.DisplayPhotoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
