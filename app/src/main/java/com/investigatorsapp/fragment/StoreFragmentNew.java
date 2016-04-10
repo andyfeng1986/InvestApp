@@ -269,7 +269,7 @@ public class StoreFragmentNew extends Fragment implements View.OnClickListener{
             return;
         }
         final String store = myAdapter.getStoreList().get(pos);
-        String content =  salerno2ContentMap.get(salerno2ContentMap.get(store));
+        String content =  salerno2ContentMap.get(name2SalernoMap.get(store));
 
         String resultGsonString = new StringBuilder().append("{\"type\":\"postQst2\",")
                 .append(content).append("}").toString();
@@ -367,36 +367,47 @@ public class StoreFragmentNew extends Fragment implements View.OnClickListener{
     }
 
     private void uploadPhoto(final int pos, final int photoIndex, final boolean commitOne) {
-//        String storeName = myAdapter.getStoreList().get(pos);
-//        final String salerno = name2SalernoMap.get(storeName);
-//        String content = salerno2ContentMap.get(salerno);
-//        int start = content.indexOf("create_time") + 8 + 3;
-//        int end = content.indexOf("\"", start);
-//        String createTime = content.substring(start, end);
-//        final File file = new File(Util.getPhotoFilePath(salerno, createTime));
-        String photoName = salerno2ContentMap.get("photoname" + photoIndex);
-        final File file = new File(Util.getPhotoFilePath(photoName));
-        if(!TextUtils.isEmpty(photoName) && file.exists()) {
-            Util.uploadPhotoFile(photoName, new FileUploaderAsyncHttp.UpLoaderCallback() {
-                @Override
-                public void onSuccess(String response) {
+        String storeName = myAdapter.getStoreList().get(pos);
+        final String salerno = name2SalernoMap.get(storeName);
+        String content = salerno2ContentMap.get(salerno);
+        int index = content.indexOf("photoname" + photoIndex);
+        String photoName = "";
+        if(index != -1) {
+            int start = index + 10 + 3;
+            int end = content.indexOf("\"", start);
+            photoName = content.substring(start, end);
+        }
+        if(!TextUtils.isEmpty(photoName)) {
+            final File file = new File(Util.getPhotoFilePath(photoName));
+            if(file.exists()) {
+                Util.uploadPhotoFile(photoName, new FileUploaderAsyncHttp.UpLoaderCallback() {
+                    @Override
+                    public void onSuccess(String response) {
 //                    if (file != null && file.exists()) {
 //                        file.delete();
 //                    }
 //                    uploadAudio(pos, commitOne);
-                    uploadPhoto(pos, photoIndex + 1, commitOne);
-                }
-
-                @Override
-                public void onFailed(int responseCode, String failReason) {
-                    if (commitOne) {
-                        Toast.makeText(getActivity(), "上传失败 : " + failReason, Toast.LENGTH_LONG).show();
-                        dissmissProgress();
-                    } else {
-                        commitNext(pos, false);
+                        uploadPhoto(pos, photoIndex + 1, commitOne);
                     }
+
+                    @Override
+                    public void onFailed(int responseCode, String failReason) {
+                        if (commitOne) {
+                            Toast.makeText(getActivity(), "上传失败 : " + failReason, Toast.LENGTH_LONG).show();
+                            dissmissProgress();
+                        } else {
+                            commitNext(pos, false);
+                        }
+                    }
+                });
+            } else {
+                if (commitOne) {
+                    Toast.makeText(getActivity(), "上传失败 : 图片不存在", Toast.LENGTH_LONG).show();
+                    dissmissProgress();
+                } else {
+                    commitNext(pos, false);
                 }
-            });
+            }
         }else {
             uploadAudio(pos, commitOne);
         }
@@ -406,7 +417,7 @@ public class StoreFragmentNew extends Fragment implements View.OnClickListener{
         String storeName = myAdapter.getStoreList().get(pos);
         final String salerno = name2SalernoMap.get(storeName);
         String content = salerno2ContentMap.get(salerno);
-        int start = content.indexOf("create_time") + 8 + 3;
+        int start = content.indexOf("create_time") + 11 + 3;
         int end = content.indexOf("\"", start);
         String createTime = content.substring(start, end);
 

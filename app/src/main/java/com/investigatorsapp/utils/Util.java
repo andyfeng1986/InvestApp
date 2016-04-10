@@ -148,7 +148,7 @@ public class Util {
         }
     }
 
-    private static String dataStringConvert(String dateString) {
+    public static String dataStringConvert(String dateString) {
         SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String time;
         try {

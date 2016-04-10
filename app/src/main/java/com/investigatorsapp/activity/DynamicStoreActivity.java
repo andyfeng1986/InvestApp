@@ -686,7 +686,8 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         if(mSurvey != null && mSurvey.photo != null && mSurvey.photo.size() > 0) {
             for(int i = 0; i < mSurvey.photo.size(); i++) {
                 sb.append(",").append(appendString("photoname" + mSurvey.photo.get(i).id,
-                        Util.getPhotoFilePath(mSalerNo, mSurvey.photo.get(i).id, mEnterTime)));
+                        mSalerNo + "_" + mSurvey.photo.get(i).id + "_"
+                                + Util.dataStringConvert(mEnterTime) + ".jpg"));
             }
         }
         try {
