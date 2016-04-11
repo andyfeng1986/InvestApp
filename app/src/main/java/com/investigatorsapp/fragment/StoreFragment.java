@@ -234,9 +234,10 @@ public class StoreFragment extends Fragment implements View.OnClickListener{
                     }else if(Constant.RET_DUP_COMMIT_CODE.equals(response.retcode)){
                         //注释，否则会导致全部提交后的后续提交出错
 //                        deleteItem(pos);
-                        if(commitOne) {
-                            Toast.makeText(getActivity(), "此门店信息已提交, 长按可删除此门店", Toast.LENGTH_LONG).show();
-                        }
+                        commitSuccess = true;
+//                        if(commitOne) {
+//                            Toast.makeText(getActivity(), "此门店信息已提交, 长按可删除此门店", Toast.LENGTH_LONG).show();
+//                        }
                     }else {
                         if(commitOne) {
                             Toast.makeText(getActivity(), response.retmessage, Toast.LENGTH_LONG).show();

@@ -569,13 +569,7 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
                         if(Constant.RET_SUCCESS_CODE.equals(response.retcode)) {
                             uploadPhoto();
                         }else if(Constant.RET_DUP_COMMIT_CODE.equals(response.retcode)){
-                            StoreDao dao = DaoSessionInstance.getDaoSession(StoreRecordActivity.this).getStoreDao();
-                            Store store = dao.queryBuilder().where(StoreDao.Properties.Salerno.eq(mSalerNo)).build().unique();
-                            if(store != null) {
-                                dao.delete(mStore);
-                            }
-                            Toast.makeText(StoreRecordActivity.this, "此门店信息已提交", Toast.LENGTH_LONG).show();
-                            finish();
+                            uploadPhoto();
                         }else {
                             commitFail(response.retmessage);
                         }
@@ -592,6 +586,7 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
             VolleySingleton.getInstance().addToRequestQueue(gsonRequest);
         }
     }
+
 
     private void uploadPhoto() {
         final File file = new File(Util.getPhotoFilePath(mSalerNo, mEnterTime));
