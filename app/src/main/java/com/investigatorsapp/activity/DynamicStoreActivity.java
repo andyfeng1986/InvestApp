@@ -516,7 +516,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            SalernoManager.getInstance().updatePolycountHashMap(mPolygonid);
+            SalernoManager.getInstance().updatePolycountHashMap(mPolygonid, mSalerNo);
             Toast.makeText(this, "问卷已保存, 请后续在店面页面提交", Toast.LENGTH_LONG).show();
             finish();
         }
@@ -537,8 +537,9 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
                         if(Constant.RET_SUCCESS_CODE.equals(response.retcode)) {
                             uploadPhoto();
                         }else if(Constant.RET_DUP_COMMIT_CODE.equals(response.retcode)){
-                            Toast.makeText(DynamicStoreActivity.this, "此门店信息已提交", Toast.LENGTH_LONG).show();
-                            finish();
+//                            Toast.makeText(DynamicStoreActivity.this, "此门店信息已提交", Toast.LENGTH_LONG).show();
+//                            finish();
+                            uploadPhoto();
                         }else {
                             commitFail(response.retmessage);
                         }
@@ -635,7 +636,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void commitSuccess() {
-        SalernoManager.getInstance().updatePolycountHashMap(mPolygonid);
+        SalernoManager.getInstance().updatePolycountHashMap(mPolygonid, mSalerNo);
         deleteFile();
         Toast.makeText(this, "上传成功", Toast.LENGTH_LONG).show();
         dissmissProgress();
