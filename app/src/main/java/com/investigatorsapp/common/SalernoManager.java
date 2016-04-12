@@ -71,10 +71,15 @@ public class SalernoManager {
         }
     }
 
-    public synchronized void updatePolycountHashMap(String polyno) {
-        Integer polycount = salernoHashMap.get(polyno);
-        if(polycount != null) {
-            salernoHashMap.put(polyno, polycount + 1);
+    public synchronized void updatePolycountHashMap(String polyno, String salerno) {
+        try {
+            int salernum = Integer.parseInt(salerno.substring(salerno.length() - 5));
+            Integer polycount = salernoHashMap.get(polyno);
+            if(polycount != null && salernum >= polycount) {
+                salernoHashMap.put(polyno, polycount + 1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
