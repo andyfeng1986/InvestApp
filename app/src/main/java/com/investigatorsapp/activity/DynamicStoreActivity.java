@@ -458,7 +458,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void commitSuccess() {
-        SalernoManager.getInstance().updatePolycountHashMap(mPolygonid);
+        SalernoManager.getInstance().updatePolycountHashMap(mPolygonid, mSalerNo);
         Toast.makeText(this, "上传成功", Toast.LENGTH_LONG).show();
         dissmissProgress();
         finish();

@@ -533,7 +533,7 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
                     dao.insertOrReplace(mStore);
                 }else {
                     dao.insertOrReplace(mStore);
-                    SalernoManager.getInstance().updatePolycountHashMap(mPolygonid);
+                    SalernoManager.getInstance().updatePolycountHashMap(mPolygonid, mSalerNo);
 //                    MyApp.updatePolycountHashMap(mPolygonid);
                 }
                 Toast.makeText(this, "问卷已保存, 请后续在店面页面提交", Toast.LENGTH_LONG).show();
@@ -638,7 +638,7 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
         if(store != null) {
             dao.delete(mStore);
         }else {
-            SalernoManager.getInstance().updatePolycountHashMap(mPolygonid);
+            SalernoManager.getInstance().updatePolycountHashMap(mPolygonid, mSalerNo);
 //            MyApp.updatePolycountHashMap(mPolygonid);
         }
         Toast.makeText(StoreRecordActivity.this, "上传成功", Toast.LENGTH_LONG).show();
