@@ -6,12 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.investigatorsapp.R;
 import com.investigatorsapp.common.VolleySingleton;
+import com.investigatorsapp.logger.Logger;
 
 import java.util.List;
 
@@ -55,7 +55,7 @@ public class ChoiceAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder {
-        public ImageView iv;
+        public NetworkImageView iv;
         public TextView tv;
         public CheckBox cb;
     }
@@ -68,7 +68,7 @@ public class ChoiceAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.mutli_item, null);
             holder.tv = (TextView) convertView.findViewById(R.id.item_tv);
             holder.cb = (CheckBox) convertView.findViewById(R.id.item_cb);
-            holder.iv = (ImageView) convertView.findViewById(R.id.item_iv);
+            holder.iv = (NetworkImageView) convertView.findViewById(R.id.item_iv);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -77,8 +77,9 @@ public class ChoiceAdapter extends BaseAdapter {
         if(icons == null || icons.size() == 0) {
             holder.iv.setVisibility(View.GONE);
         }else {
-            VolleySingleton.getInstance().getImageLoader().get(icons.get(position),
-                    ImageLoader.getImageListener(holder.iv, 0, 0));
+            holder.iv.setImageUrl(icons.get(position), VolleySingleton.getInstance().getImageLoader());
+//            VolleySingleton.getInstance().getImageLoader().get(icons.get(position),
+//                    ImageLoader.getImageListener(holder.iv, 0, 0));
         }
         holder.cb.setChecked(selecteds.get(position));
         return convertView;
