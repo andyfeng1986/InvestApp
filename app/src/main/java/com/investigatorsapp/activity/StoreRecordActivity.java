@@ -832,9 +832,18 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void updateStoreFromUI(Store store) {
-        store.setUserid(UserSingleton.getInstance().getUser().userid);
-        store.setJobid(UserSingleton.getInstance().getUser().jobid);
-        store.setToken(UserSingleton.getInstance().getUser().token);
+//        store.setUserid(UserSingleton.getInstance().getUser().userid);
+//        store.setJobid(UserSingleton.getInstance().getUser().jobid);
+//        store.setToken(UserSingleton.getInstance().getUser().token);
+        if(TextUtils.isEmpty(store.getUserid())) {
+            store.setUserid(UserSingleton.getInstance().getUser().userid);
+        }
+        if(TextUtils.isEmpty(store.getJobid())) {
+            store.setJobid(UserSingleton.getInstance().getUser().jobid);
+        }
+        if(TextUtils.isEmpty(store.getToken())) {
+            store.setToken(UserSingleton.getInstance().getUser().token);
+        }
         store.setSalerno(mSalerNo);
         store.setPolygonid(mPolygonid);
         store.setPolygonname(mPolyname);
