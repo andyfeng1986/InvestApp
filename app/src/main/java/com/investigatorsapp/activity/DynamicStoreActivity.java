@@ -11,6 +11,7 @@ import android.os.Message;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -236,7 +237,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         telephoneET = (EditText) telphoneLL.findViewById(R.id.et);
         telephoneET.setInputType(InputType.TYPE_CLASS_PHONE);
         telephoneET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(40)});
-        ((TextView)(telphoneLL.findViewById(R.id.tv))).setText("手机");
+        ((TextView)(telphoneLL.findViewById(R.id.tv))).setText("电话");
 
         addressLL = (ViewGroup)findViewById(R.id.include_address);
         addressET = (EditText) addressLL.findViewById(R.id.et);
@@ -280,7 +281,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         if(question != null && question.type != null) {
             View view = LayoutInflater.from(this).inflate(R.layout.multi_store_record_item, mContentLL, false);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    (int) getResources().getDimension(R.dimen.y100));
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
             layoutParams.topMargin = (int) getResources().getDimension(R.dimen.y10);
             view.setLayoutParams(layoutParams);
             mContentLL.addView(view);
@@ -387,7 +388,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         if(question != null && question.type != null) {
             View view = LayoutInflater.from(this).inflate(R.layout.text_store_record_item, mContentLL, false);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    (int) getResources().getDimension(R.dimen.y100));
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
             layoutParams.topMargin = (int) getResources().getDimension(R.dimen.y10);
             view.setLayoutParams(layoutParams);
             mContentLL.addView(view);
@@ -860,6 +861,34 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         addressLayout.setPronvice(province);
         addressLayout.setCity(city);
         addressLayout.setArea(area);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            showExitDialog();
+            return true;
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
+    private void showExitDialog() {
+        new AlertDialog.Builder(this).setTitle("退出前请确认数据已保存，否则会丢失已填数据，确认退出吗？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 点击“确认”后的操作
+                        DynamicStoreActivity.this.finish();
+                    }
+                })
+                .setNegativeButton("返回", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 点击“返回”后的操作,这里不设置没有任何操作
+                    }
+                }).show();
     }
 
 //    private void clickPhotoBtn() {
