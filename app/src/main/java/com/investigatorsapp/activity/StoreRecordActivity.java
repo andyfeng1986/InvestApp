@@ -1,6 +1,7 @@
 package com.investigatorsapp.activity;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,6 +16,7 @@ import android.provider.MediaStore;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -273,13 +275,13 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
         contactLL = (ViewGroup) findViewById(R.id.include_contact);
         contactET = (EditText) contactLL.findViewById(R.id.et);
         contactET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(128)});
-        ((TextView)(contactLL.findViewById(R.id.tv))).setText("联系人");
+        ((TextView)(contactLL.findViewById(R.id.tv))).setText("联系人*");
 
         telphoneLL = (ViewGroup) findViewById(R.id.include_telphone);
         telphoneET = (EditText) telphoneLL.findViewById(R.id.et);
         telphoneET.setInputType(InputType.TYPE_CLASS_PHONE);
         telphoneET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(40)});
-        ((TextView)(telphoneLL.findViewById(R.id.tv))).setText("手机");
+        ((TextView)(telphoneLL.findViewById(R.id.tv))).setText("电话");
 
         emailLL = (ViewGroup)findViewById(R.id.include_email);
         emailET = (EditText) emailLL.findViewById(R.id.et);
@@ -497,6 +499,10 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
         }
         if(TextUtils.isEmpty(customNameET.getText().toString())) {
             Toast.makeText(this, "客户名称不能为空", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(TextUtils.isEmpty(contactET.getText().toString())) {
+            Toast.makeText(this, "联系人不能为空", Toast.LENGTH_SHORT).show();
             return false;
         }
         if(TextUtils.isEmpty(addressET.getText().toString())) {
@@ -910,7 +916,35 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-//    private void showPopupWindow(View view) {
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            showExitDialog();
+            return true;
+        }
+        return super.onKeyUp(keyCode, event);
+    }
+
+    private void showExitDialog() {
+        new AlertDialog.Builder(this).setTitle("退出前请确认数据已保存，否则会丢失已填数据，确认退出吗？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 点击“确认”后的操作
+                        StoreRecordActivity.this.finish();
+                    }
+                })
+                .setNegativeButton("返回", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 点击“返回”后的操作,这里不设置没有任何操作
+                    }
+                }).show();
+    }
+
+    //    private void showPopupWindow(View view) {
 //        addressLayout = (AddressLayout) LayoutInflater.from(this).inflate(
 //                R.layout.wheel_address, null);
 //
