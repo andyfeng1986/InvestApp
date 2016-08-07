@@ -543,6 +543,7 @@ public class StoreRecordActivity extends BaseActivity implements View.OnClickLis
 //                    MyApp.updatePolycountHashMap(mPolygonid);
                 }
                 Toast.makeText(this, "问卷已保存, 请后续在店面页面提交", Toast.LENGTH_LONG).show();
+                finish();
             }
         }else if(v.equals(commitBtn)) {
             stopMediaRecorder();
