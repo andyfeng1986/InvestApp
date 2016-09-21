@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="custom_geo_title">25sp</dimen>
-    <dimen name="store_record_right_item_width">@dimen/x480</dimen>
+    <dimen name="store_record_right_item_width">@dimen/x390</dimen>
     <dimen name="store_record_right_margin">@dimen/x60</dimen>
     <dimen name="store_record_left_margin">@dimen/x20</dimen>
 </resources>
