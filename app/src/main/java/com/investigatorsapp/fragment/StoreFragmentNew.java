@@ -36,7 +36,10 @@ import com.investigatorsapp.utils.Util;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +57,19 @@ public class StoreFragmentNew extends Fragment implements View.OnClickListener{
     private Map<String, String> salerno2ContentMap;
     private Map<String ,String> name2SalernoMap;
 
+    static class CompratorByLastModified implements Comparator<File> {
+        public int compare(File f1, File f2) {
+            long diff = f1.lastModified() - f2.lastModified();
+            if (diff > 0) {
+                return 1;
+            } else if (diff == 0) {
+                return 0;
+            } else {
+                return -1;
+            }
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Logger.d(TAG, "onCreateView");
@@ -63,8 +79,8 @@ public class StoreFragmentNew extends Fragment implements View.OnClickListener{
         commitAllBtn.setOnClickListener(this);
         View emptyView = view.findViewById(R.id.empty);
         listView.setEmptyView(emptyView);
-        salerno2ContentMap = new HashMap<>();
-        name2SalernoMap = new HashMap<>();
+        salerno2ContentMap = new LinkedHashMap<>();
+        name2SalernoMap = new LinkedHashMap<>();
         return view;
     }
 
@@ -136,6 +152,7 @@ public class StoreFragmentNew extends Fragment implements View.OnClickListener{
         }
         File[] fileList = destDir.listFiles();
         if(fileList != null && fileList.length > 0) {
+            Arrays.sort(fileList, new StoreFragmentNew.CompratorByLastModified());
             for(File file : fileList) {
                 String result = Util.readFileToString(file);
                 if(TextUtils.isEmpty(result)) {
