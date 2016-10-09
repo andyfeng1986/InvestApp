@@ -8,8 +8,8 @@ android {
         applicationId "com.investigatorsapp"
         minSdkVersion 14
         targetSdkVersion 20
-        versionCode 44
-        versionName "2.0.4"
+        versionCode 45
+        versionName "2.0.5"
     }
 
 //    lintOptions {

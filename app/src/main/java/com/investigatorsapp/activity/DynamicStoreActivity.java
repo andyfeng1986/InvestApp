@@ -111,6 +111,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
                 startAudio(mSurvey);
                 mediaRecorderHandler = new MediaRecorderHandler(DynamicStoreActivity.this);
                 mediaRecorderHandler.sendEmptyMessageDelayed(0, 20 * 60 * 1000);
+                initAddressLayoutFromPrefer();
             }
             polynameTV.setText("区块: " + mPolyname);
             latTV.setText("纬度: " + mLatb);
@@ -177,6 +178,15 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         stopAudio();
+        if(!TextUtils.isEmpty(addressLayout.getPronvice())) {
+            Util.savePronvice(this, addressLayout.getPronvice());
+        }
+        if(!TextUtils.isEmpty(addressLayout.getCity())) {
+            Util.saveCtiy(this, addressLayout.getCity());
+        }
+        if(!TextUtils.isEmpty(addressLayout.getArea())) {
+            Util.saveArea(this, addressLayout.getArea());
+        }
         super.onDestroy();
     }
 
@@ -861,6 +871,21 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         addressLayout.setPronvice(province);
         addressLayout.setCity(city);
         addressLayout.setArea(area);
+    }
+
+    private void initAddressLayoutFromPrefer() {
+        String province = Util.getPronvice(this);
+        String city = Util.getCity(this);
+        String area = Util.getArea(this);
+        if(!TextUtils.isEmpty(province)) {
+            addressLayout.setPronvice(province);
+            if(!TextUtils.isEmpty(city)) {
+                addressLayout.setCity(city);
+                if(!TextUtils.isEmpty(area)) {
+                    addressLayout.setArea(area);
+                }
+            }
+        }
     }
 
     @Override
