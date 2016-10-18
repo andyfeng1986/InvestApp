@@ -241,7 +241,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
         customNameLL = (ViewGroup)findViewById(R.id.include_customname);
         customNameET = (EditText) customNameLL.findViewById(R.id.et);
         customNameET.setFilters(new InputFilter[]{new InputFilter.LengthFilter(128)});
-        ((TextView)(customNameLL.findViewById(R.id.tv))).setText("客户名称*");
+        ((TextView)(customNameLL.findViewById(R.id.tv))).setText("店名称*");
 
         telphoneLL = (ViewGroup) findViewById(R.id.include_telphone);
         telephoneET = (EditText) telphoneLL.findViewById(R.id.et);
@@ -779,7 +779,7 @@ public class DynamicStoreActivity extends BaseActivity implements View.OnClickLi
 //            return false;
 //        }
         if(TextUtils.isEmpty(customNameET.getText().toString())) {
-            Toast.makeText(this, "客户名称不能为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "店名称不能为空", Toast.LENGTH_SHORT).show();
             return false;
         }
         if(TextUtils.isEmpty(addressET.getText().toString())) {
