@@ -19,7 +19,7 @@
         <item>综合保养店</item>
         <item>快修店</item>
         <item>车队</item>
-        <item>其他</item>
+        <item>中央采购连锁店</item>
     </string-array>
 
     <string-array name="diesel">
@@ -48,5 +48,3 @@
     </string-array>
 
 </resources>
-
-
